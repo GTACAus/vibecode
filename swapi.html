@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Star Wars Character Search (SWAPI)</title>
+    <style>
+        :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #111; background: #f6f8fa; }
+        body { margin: 0; padding: 24px; display: flex; justify-content: center; }
+        .app { max-width: 820px; width: 100%; }
+        header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+        h1 { font-size:18px; margin:0; }
+        .search { display:flex; gap:8px; margin-bottom:12px; }
+        input[type="search"] { flex:1; padding:10px 12px; border:1px solid #ccd; border-radius:6px; font-size:15px; }
+        button { padding:10px 14px; border-radius:6px; border:0; background:#0b63d6; color:white; cursor:pointer; font-weight:600; }
+        button:disabled { opacity:.6; cursor:default; }
+        .results { background:white; border:1px solid #e2e8f0; border-radius:8px; padding:12px; }
+        .list { display:flex; flex-direction:column; gap:8px; margin:8px 0 0 0; }
+        .item { padding:10px; border-radius:6px; border:1px solid #eef2f7; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+        .item:hover { background:#f7fbff; }
+        .meta { color:#555; font-size:13px; }
+        .details { margin-top:12px; padding-top:12px; border-top:1px dashed #eef2f7; }
+        dl { display:grid; grid-template-columns:160px 1fr; row-gap:8px; column-gap:12px; margin:0; }
+        dt { color:#444; font-weight:600; }
+        dd { margin:0; color:#222; }
+        .small { font-size:13px; color:#666; margin-top:8px; }
+        .error { color:#b91c1c; font-weight:600; }
+        footer { margin-top:12px; font-size:13px; color:#666; }
+        @media (max-width:520px){ dl { grid-template-columns:120px 1fr; } }
+    </style>
+</head>
+<body>
+    <main class="app" role="main">
+        <header>
+            <h1>Star Wars Character Search</h1>
+        </header>
+
+        <div class="search" aria-label="Search form">
+            <input id="q" type="search" placeholder="Type a character name (e.g. Luke Skywalker)" aria-label="Search character" />
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <div id="status" class="small" aria-live="polite"></div>
+
+        <section class="results" id="results" hidden>
+            <div id="listContainer"></div>
+            <div id="detailsContainer"></div>
+        </section>
+
+        <footer>
+            Data from <a href="https://swapi.dev" target="_blank" rel="noopener">SWAPI</a>
+        </footer>
+    </main>
+
+    <script>
+        // Minimal single-file app that searches SWAPI for characters and shows details.
+        const q = document.getElementById('q');
+        const searchBtn = document.getElementById('searchBtn');
+        const status = document.getElementById('status');
+        const results = document.getElementById('results');
+        const listContainer = document.getElementById('listContainer');
+        const detailsContainer = document.getElementById('detailsContainer');
+
+        searchBtn.addEventListener('click', () => doSearch(q.value.trim()));
+        q.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(q.value.trim()); });
+
+        async function doSearch(term) {
+            detailsContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+            status.textContent = '';
+            results.hidden = true;
+            if (!term) {
+                status.textContent = 'Please enter a name to search.';
+                return;
+            }
+
+            setLoading(true, `Searching for "${term}"...`);
+            try {
+                const url = 'https://swapi.dev/api/people/?search=' + encodeURIComponent(term);
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Network response not ok');
+                const data = await res.json();
+                if (!data.results || data.results.length === 0) {
+                    status.innerHTML = `<span class="error">No characters found for "${term}".</span>`;
+                    setLoading(false);
+                    return;
+                }
+
+                status.textContent = `Found ${data.count} result(s). Click a character to view details.`;
+                results.hidden = false;
+
+                // Render list of matches
+                const list = document.createElement('div');
+                list.className = 'list';
+                data.results.forEach((ch, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'item';
+                    const left = document.createElement('div');
+                    left.innerHTML = `<strong>${escapeHtml(ch.name)}</strong><div class="meta">${escapeHtml(ch.birth_year)} • ${escapeHtml(ch.gender)}</div>`;
+                    const right = document.createElement('div');
+                    right.innerHTML = `<small>Details</small>`;
+                    item.appendChild(left);
+                    item.appendChild(right);
+                    item.addEventListener('click', () => showDetails(ch));
+                    list.appendChild(item);
+                });
+                listContainer.appendChild(list);
+
+                // Auto-show first result
+                showDetails(data.results[0]);
+            } catch (err) {
+                console.error(err);
+                status.innerHTML = `<span class="error">Error fetching data. Try again later.</span>`;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(isLoading, message = '') {
+            q.disabled = isLoading;
+            searchBtn.disabled = isLoading;
+            status.textContent = isLoading ? message : status.textContent;
+        }
+
+        async function showDetails(character) {
+            detailsContainer.innerHTML = '<div class="small">Loading details…</div>';
+            try {
+                // Fetch related resources (homeworld, films, species, vehicles, starships)
+                const homeworldPromise = character.homeworld ? fetchAndExtractName(character.homeworld) : Promise.resolve('Unknown');
+                const filmsPromise = fetchAllNames(character.films, 'title');
+                const speciesPromise = fetchAllNames(character.species, 'name');
+                const vehiclesPromise = fetchAllNames(character.vehicles, 'name');
+                const starshipsPromise = fetchAllNames(character.starships, 'name');
+
+                const [homeworld, films, species, vehicles, starships] = await Promise.all([
+                    homeworldPromise, filmsPromise, speciesPromise, vehiclesPromise, starshipsPromise
+                ]);
+
+                detailsContainer.innerHTML = `
+                    <div class="details">
+                        <h2 style="margin:0 0 8px 0">${escapeHtml(character.name)}</h2>
+                        <dl>
+                            <dt>Birth Year</dt><dd>${escapeHtml(character.birth_year)}</dd>
+                            <dt>Gender</dt><dd>${escapeHtml(character.gender)}</dd>
+                            <dt>Height</dt><dd>${escapeHtml(character.height)} cm</dd>
+                            <dt>Mass</dt><dd>${escapeHtml(character.mass)} kg</dd>
+                            <dt>Hair</dt><dd>${escapeHtml(character.hair_color)}</dd>
+                            <dt>Skin</dt><dd>${escapeHtml(character.skin_color)}</dd>
+                            <dt>Eyes</dt><dd>${escapeHtml(character.eye_color)}</dd>
+                            <dt>Homeworld</dt><dd>${escapeHtml(homeworld)}</dd>
+                            <dt>Species</dt><dd>${escapeHtmlArray(species)}</dd>
+                            <dt>Films</dt><dd>${escapeHtmlArray(films)}</dd>
+                            <dt>Vehicles</dt><dd>${escapeHtmlArray(vehicles)}</dd>
+                            <dt>Starships</dt><dd>${escapeHtmlArray(starships)}</dd>
+                        </dl>
+                    </div>
+                `;
+            } catch (err) {
+                console.error(err);
+                detailsContainer.innerHTML = `<div class="error">Failed to load details.</div>`;
+            }
+        }
+
+        async function fetchAndExtractName(url) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return 'Unknown';
+                const json = await res.json();
+                return json.name || json.title || 'Unknown';
+            } catch {
+                return 'Unknown';
+            }
+        }
+
+        async function fetchAllNames(urls = [], field = 'name') {
+            if (!urls || urls.length === 0) return [];
+            const promises = urls.map(u => fetch(u).then(r => r.ok ? r.json() : null).catch(()=>null));
+            const results = await Promise.all(promises);
+            return results.map(r => (r && (r[field] || r.name || r.title)) ? (r[field] || r.name || r.title) : 'Unknown');
+        }
+
+        // Helpers
+        function escapeHtml(s) {
+            if (s == null) return '';
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+        function escapeHtmlArray(arr) {
+            if (!arr || arr.length === 0) return '<em>—</em>';
+            return arr.map(escapeHtml).join(', ');
+        }
+
+    </script>
+</body>
+</html></section>
