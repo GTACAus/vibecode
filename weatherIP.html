@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IP → Local Weather</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; color:#111}
+        body{margin:0;padding:24px;background:#f7f9fc}
+        .card{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;padding:20px;box-shadow:0 6px 24px rgba(16,24,40,0.08)}
+        h1{margin:0 0 12px;font-size:20px}
+        p{margin:6px 0}
+        .meta{color:#5b6b79;font-size:13px}
+        .large{font-size:28px;margin:8px 0}
+        .btn{display:inline-block;margin-top:12px;padding:8px 12px;border-radius:8px;background:#0b69ff;color:white;text-decoration:none;border:none;cursor:pointer}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+        .box{background:#f2f6fb;padding:10px;border-radius:8px}
+        .error{color:#9b1c1c;background:#fff0f0;padding:10px;border-radius:6px;margin-top:12px}
+        footer{margin-top:18px;color:#6b7785;font-size:12px}
+    </style>
+</head>
+<body>
+    <main class="card" role="main">
+        <h1>IP → Local Weather</h1>
+        <p class="meta" id="status">Click "Get my weather" or it will run automatically.</p>
+
+        <div class="grid">
+            <div class="box">
+                <strong>IP & Location</strong>
+                <p id="ip">—</p>
+                <p id="location" class="meta">—</p>
+                <p id="coords" class="meta">—</p>
+            </div>
+
+            <div class="box">
+                <strong>Current Weather</strong>
+                <p id="summary">—</p>
+                <p class="large" id="temp">—</p>
+                <p id="details" class="meta">—</p>
+            </div>
+        </div>
+
+        <button id="refresh" class="btn">Get my weather</button>
+        <div id="error" role="alert" class="error" style="display:none"></div>
+
+        <footer>
+            Uses ipapi.co and Open-Meteo (no API keys required).
+        </footer>
+    </main>
+
+    <script>
+        // GitHub Copilot
+        (function() {
+            const statusEl = document.getElementById('status');
+            const ipEl = document.getElementById('ip');
+            const locationEl = document.getElementById('location');
+            const coordsEl = document.getElementById('coords');
+            const summaryEl = document.getElementById('summary');
+            const tempEl = document.getElementById('temp');
+            const detailsEl = document.getElementById('details');
+            const errorEl = document.getElementById('error');
+            const refreshBtn = document.getElementById('refresh');
+
+            // Mapping for Open-Meteo weather codes (condensed)
+            const weatherCodes = {
+                0: "Clear sky",
+                1: "Mainly clear",
+                2: "Partly cloudy",
+                3: "Overcast",
+                45: "Fog",
+                48: "Depositing rime fog",
+                51: "Light drizzle",
+                53: "Moderate drizzle",
+                55: "Dense drizzle",
+                56: "Light freezing drizzle",
+                57: "Dense freezing drizzle",
+                61: "Slight rain",
+                63: "Moderate rain",
+                65: "Heavy rain",
+                66: "Light freezing rain",
+                67: "Heavy freezing rain",
+                71: "Slight snow fall",
+                73: "Moderate snow fall",
+                75: "Heavy snow fall",
+                77: "Snow grains",
+                80: "Slight rain showers",
+                81: "Moderate rain showers",
+                82: "Violent rain showers",
+                85: "Slight snow showers",
+                86: "Heavy snow showers",
+                95: "Thunderstorm",
+                96: "Thunderstorm with slight hail",
+                99: "Thunderstorm with heavy hail"
+            };
+
+            async function fetchJSON(url) {
+                const res = await fetch(url, {cache: "no-store"});
+                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                return res.json();
+            }
+
+            async function getGeoFromIP() {
+                statusEl.textContent = 'Determining your IP and location (ipapi.co)…';
+                const data = await fetchJSON('https://ipapi.co/json/');
+                // ipapi.co returns latitude/longitude as strings
+                const lat = parseFloat(data.latitude ?? data.lat ?? data.latitude);
+                const lon = parseFloat(data.longitude ?? data.lon ?? data.longitude);
+                return {
+                    ip: data.ip || '',
+                    city: data.city || '',
+                    region: data.region || data.region_code || '',
+                    country: data.country_name || data.country || '',
+                    latitude: lat,
+                    longitude: lon,
+                    timezone: data.timezone || ''
+                };
+            }
+
+            async function getWeather(lat, lon, timezone) {
+                statusEl.textContent = 'Fetching current weather (open-meteo)…';
+                const params = new URLSearchParams({
+                    latitude: lat,
+                    longitude: lon,
+                    current_weather: 'true',
+                    temperature_unit: 'celsius',
+                    windspeed_unit: 'kmh',
+                    timezone: timezone || 'auto'
+                });
+                const url = 'https://api.open-meteo.com/v1/forecast?' + params.toString();
+                return fetchJSON(url);
+            }
+
+            function showError(err) {
+                errorEl.style.display = 'block';
+                errorEl.textContent = String(err);
+                statusEl.textContent = 'Error';
+            }
+
+            function clearError() {
+                errorEl.style.display = 'none';
+                errorEl.textContent = '';
+            }
+
+            async function run() {
+                clearError();
+                try {
+                    const geo = await getGeoFromIP();
+                    ipEl.textContent = geo.ip || 'Unknown IP';
+                    locationEl.textContent = [geo.city, geo.region, geo.country].filter(Boolean).join(', ') || 'Unknown location';
+                    coordsEl.textContent = (Number.isFinite(geo.latitude) && Number.isFinite(geo.longitude))
+                        ? `Lat ${geo.latitude.toFixed(4)}, Lon ${geo.longitude.toFixed(4)}`
+                        : 'Coordinates not available';
+
+                    if (!Number.isFinite(geo.latitude) || !Number.isFinite(geo.longitude)) {
+                        throw new Error('Could not determine coordinates from IP.');
+                    }
+
+                    const weatherData = await getWeather(geo.latitude, geo.longitude, geo.timezone);
+                    const cw = weatherData.current_weather;
+                    if (!cw) throw new Error('No current weather returned.');
+
+                    const wc = cw.weathercode;
+                    const wcText = weatherCodes[wc] || `Weather code ${wc}`;
+                    summaryEl.textContent = wcText;
+                    tempEl.textContent = `${cw.temperature.toFixed(1)}°${weatherData.temperature_unit || 'C'}`;
+                    detailsEl.textContent = `Wind ${cw.windspeed} ${weatherData.windspeed_unit || 'km/h'} • Time: ${cw.time}`;
+
+                    statusEl.textContent = 'Updated';
+                } catch (err) {
+                    showError(err.message || String(err));
+                    // keep some visible placeholders
+                    summaryEl.textContent = '—';
+                    tempEl.textContent = '—';
+                    detailsEl.textContent = '—';
+                }
+            }
+
+            // wire up
+            refreshBtn.addEventListener('click', run);
+
+            // auto-run on load
+            run();
+        })();
+    </script>
+</body>
+</html></div></main>
