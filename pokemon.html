@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pokémon Search (single-file)</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4}
+        body{max-width:900px;margin:32px auto;padding:16px}
+        header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+        input[type="search"]{flex:1;padding:10px 12px;font-size:16px;border:1px solid #ccc;border-radius:6px}
+        button{padding:10px 14px;font-size:15px;border-radius:6px;border:1px solid #0b67ff;background:#0b67ff;color:#fff;cursor:pointer}
+        .card{display:flex;gap:18px;padding:16px;border:1px solid #eee;border-radius:8px;align-items:flex-start}
+        .sprite{width:200px;height:200px;display:flex;align-items:center;justify-content:center;background:#f7f7f7;border-radius:8px}
+        img{max-width:100%;max-height:100%}
+        h2{margin:0 0 6px 0}
+        .meta{font-size:14px;color:#444;margin-bottom:8px}
+        .pill{display:inline-block;background:#f1f5ff;color:#003399;padding:6px 8px;border-radius:999px;margin-right:6px;font-weight:600;font-size:13px}
+        .abilities{margin:8px 0}
+        .section{margin-top:12px}
+        .small{font-size:13px;color:#666}
+        .error{color:#b00020}
+        code.api-link{background:#f4f4f4;padding:3px 6px;border-radius:4px;font-size:13px}
+        footer{margin-top:18px;font-size:13px;color:#666}
+    </style>
+</head>
+<body>
+    <header>
+        <input id="q" type="search" placeholder='Search by name or id (e.g. "ditto")' aria-label="Pokemon name or id" />
+        <button id="go">Search</button>
+    </header>
+
+    <main>
+        <div id="result"></div>
+        <div id="message" class="small"></div>
+    </main>
+
+    <footer>
+        Powered by PokeAPI — endpoint used: <code class="api-link" id="apilink">https://pokeapi.co/api/v2/pokemon/</code>
+    </footer>
+
+    <script>
+        // Single-file Pokemon search app using pokeapi.co
+        const q = document.getElementById('q');
+        const go = document.getElementById('go');
+        const result = document.getElementById('result');
+        const message = document.getElementById('message');
+        const apiBase = 'https://pokeapi.co/api/v2/pokemon/';
+
+        // Prefill example
+        q.value = 'ditto';
+
+        async function fetchPokemon(nameOrId) {
+            const url = apiBase + encodeURIComponent(nameOrId.toLowerCase().trim());
+            message.textContent = 'Loading...';
+            result.innerHTML = '';
+            try {
+                const res = await fetch(url);
+                if (!res.ok) {
+                    if (res.status === 404) throw new Error('Not found — check the name or id');
+                    throw new Error('Network error: ' + res.status);
+                }
+                const data = await res.json();
+                renderPokemon(data, url);
+            } catch (err) {
+                message.innerHTML = `<span class="error">${escapeHtml(err.message)}</span>`;
+            }
+        }
+
+        function renderPokemon(p, apiUrl) {
+            message.textContent = '';
+            // Choose best available artwork
+            const art =
+                (p.sprites && p.sprites.other && p.sprites.other['official-artwork'] && p.sprites.other['official-artwork'].front_default) ||
+                (p.sprites && p.sprites.front_default) ||
+                '';
+
+            const types = (p.types || []).map(t => t.type.name).join(', ');
+            const abilities = (p.abilities || []).map(a => `${a.ability.name}${a.is_hidden ? ' (hidden)' : ''}`).join(', ');
+            const stats = (p.stats || []).map(s => `<div><strong>${escapeHtml(s.stat.name)}:</strong> ${s.base_stat}</div>`).join('');
+            const moves = (p.moves || []).slice(0, 8).map(m => m.move.name).join(', ');
+            const forms = (p.forms || []).map(f => f.name).join(', ');
+
+            result.innerHTML = `
+                <div class="card">
+                    <div class="sprite" aria-hidden="true">
+                        ${art ? `<img src="${escapeAttr(art)}" alt="${escapeAttr(p.name)}">` : `<span class="small">No image</span>`}
+                    </div>
+                    <div style="flex:1">
+                        <h2>${escapeHtml(capitalize(p.name))} <span class="small">#${p.id}</span></h2>
+                        <div class="meta">
+                            <span class="pill">${escapeHtml(types)}</span>
+                            <span class="pill">Exp: ${p.base_experience ?? '—'}</span>
+                        </div>
+
+                        <div class="abilities"><strong>Abilities:</strong> ${escapeHtml(abilities)}</div>
+                        <div class="section"><strong>Height / Weight:</strong> ${p.height} / ${p.weight}</div>
+                        <div class="section"><strong>Moves (first 8):</strong> ${escapeHtml(moves || '—')}</div>
+                        <div class="section"><strong>Stats:</strong> ${stats}</div>
+                        <div class="section small">Forms: ${escapeHtml(forms || '—')}</div>
+                        <div class="section small">API: <a href="${escapeAttr(apiUrl)}" target="_blank" rel="noopener">${escapeHtml(apiUrl)}</a></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Utility helpers
+        function capitalize(s){ return String(s).replace(/(^|\s)\S/g, t => t.toUpperCase()); }
+        function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        function escapeAttr(s){ return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+        // Events
+        go.addEventListener('click', () => {
+            if (!q.value.trim()) { message.textContent = 'Type a name or id to search (e.g. ditto).'; return; }
+            fetchPokemon(q.value);
+        });
+
+        q.addEventListener('keydown', e => {
+            if (e.key === 'Enter') go.click();
+        });
+
+        // Initial fetch for example
+        fetchPokemon(q.value);
+    </script>
+</body>
+</html></html>
