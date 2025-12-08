@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>QuickChart Word Cloud — Single File</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 18px; max-width: 900px; }
+        h1 { font-size: 18px; margin-bottom: 6px; }
+        label { display: block; margin: 12px 0 6px; font-weight: 600; }
+        textarea { width: 100%; height: 220px; padding: 8px; font-size: 14px; box-sizing: border-box; }
+        .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+        .controls input[type="number"] { width:88px; padding:6px; }
+        button { padding: 8px 12px; cursor:pointer; }
+        #previewWrap { margin-top: 16px; display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+        #preview { border: 1px solid #ddd; background: #fff; max-width: 100%; }
+        .meta { font-size:13px; color:#444; }
+        .small { font-size:12px; color:#666; }
+        pre { white-space:pre-wrap; word-break:break-all; background:#f7f7f7; padding:8px; border-radius:4px; }
+    </style>
+</head>
+<body>
+    <h1>QuickChart Word Cloud</h1>
+    <div class="meta">Paste or type text below and click Generate to create a word cloud image using <a href="https://quickchart.io/wordcloud" target="_blank">quickchart.io/wordcloud</a>.</div>
+
+    <label for="text">Text</label>
+    <textarea id="text" placeholder="Paste lots of text here...">Paste or type your text here. Repeated words will appear larger. Example: quick quick chart word cloud cloud cloud</textarea>
+
+    <div class="controls">
+        <label class="small" for="width">Width</label>
+        <input id="width" type="number" value="800" min="200" />
+        <label class="small" for="height">Height</label>
+        <input id="height" type="number" value="600" min="200" />
+        <label class="small" for="maxWords">Max words</label>
+        <input id="maxWords" type="number" value="100" min="10" />
+        <button id="gen">Generate</button>
+        <button id="clear">Clear</button>
+    </div>
+
+    <div id="previewWrap">
+        <div>
+            <div class="small">Preview</div>
+            <img id="preview" alt="word cloud preview" width="400" />
+            <div style="margin-top:6px;">
+                <a id="download" href="#" download="wordcloud.png">Download PNG</a>
+                <span style="margin-left:8px;" id="status" class="small"></span>
+            </div>
+        </div>
+
+        <div style="flex:1; min-width:260px;">
+            <div class="small">Image URL (you can embed this):</div>
+            <pre id="url">—</pre>
+            <div class="small" style="margin-top:8px;">Markdown</div>
+            <pre id="md">—</pre>
+        </div>
+    </div>
+
+    <script>
+        // GitHub Copilot
+        (function () {
+            const textEl = document.getElementById('text');
+            const genBtn = document.getElementById('gen');
+            const clearBtn = document.getElementById('clear');
+            const preview = document.getElementById('preview');
+            const urlEl = document.getElementById('url');
+            const mdEl = document.getElementById('md');
+            const downloadA = document.getElementById('download');
+            const status = document.getElementById('status');
+            const widthEl = document.getElementById('width');
+            const heightEl = document.getElementById('height');
+            const maxWordsEl = document.getElementById('maxWords');
+
+            function buildQuickChartWordCloudUrl(text, opts = {}) {
+                // Basic endpoint: https://quickchart.io/wordcloud?text=...
+                // We'll include width/height/format and simple options.
+                const base = 'https://quickchart.io/wordcloud';
+                const params = new URLSearchParams();
+                params.set('text', text);
+                params.set('format', 'png');
+                if (opts.width) params.set('width', String(opts.width));
+                if (opts.height) params.set('height', String(opts.height));
+                if (opts.maxWords) params.set('maxNumWords', String(opts.maxWords)); // supported param name
+                // you can add more params: backgroundColor, colors, minWordLength, minWordFrequency, etc.
+                return base + '?' + params.toString();
+            }
+
+            function cleanInput(text) {
+                // Minimal cleaning: collapse whitespace, trim.
+                return text.replace(/\r\n/g, '\n').replace(/\s+/g, ' ').trim();
+            }
+
+            function setPreviewFromUrl(src) {
+                preview.src = src;
+                downloadA.href = src;
+                urlEl.textContent = src;
+                mdEl.textContent = `![word cloud](${src})`;
+            }
+
+            genBtn.addEventListener('click', () => {
+                status.textContent = '';
+                const raw = textEl.value || '';
+                const text = cleanInput(raw);
+                if (!text) {
+                    status.textContent = 'Paste some text first.';
+                    return;
+                }
+                // quickchart wordcloud responds to repeated words to size them.
+                // Build URL-encoded text. Use encodeURIComponent for safety.
+                const opts = {
+                    width: parseInt(widthEl.value, 10) || 800,
+                    height: parseInt(heightEl.value, 10) || 600,
+                    maxWords: parseInt(maxWordsEl.value, 10) || 100
+                };
+
+                // To avoid extremely long URLs with very large text, if text length is long,
+                // we create a simple frequency list and pass a compact "word list" as repeated entries.
+                // But quickchart accepts raw text; we'll use raw text here but if too long we trim.
+                const MAX_URL_LENGTH = 1900;
+                let payload = text;
+                let encoded = encodeURIComponent(payload);
+                if ((('https://quickchart.io/wordcloud?text=').length + encoded.length) > MAX_URL_LENGTH) {
+                    // Reduce by trimming text while trying to preserve common words:
+                    // Build frequency map and recreate a compact repeated-word string up to max words * 3 repeats.
+                    const words = text.toLowerCase().match(/\b[\p{L}\p{N}']+\b/ug) || [];
+                    const freq = {};
+                    for (const w of words) freq[w] = (freq[w] || 0) + 1;
+                    const items = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+                    const maxWords = Math.max(50, opts.maxWords || 100);
+                    const chosen = items.slice(0, maxWords);
+                    const rebuilt = [];
+                    for (const w of chosen) {
+                        // repeat the word proportionally but cap repeats to keep URL length reasonable
+                        const repeats = Math.min(5, Math.max(1, Math.round((freq[w]/(freq[chosen[0]]||1))*3)));
+                        for (let i=0;i<repeats;i++) rebuilt.push(w);
+                    }
+                    payload = rebuilt.join(' ');
+                    encoded = encodeURIComponent(payload);
+                    status.textContent = 'Input was long; using condensed frequency-based payload.';
+                }
+
+                const finalUrl = buildQuickChartWordCloudUrl(payload, opts);
+                setPreviewFromUrl(finalUrl);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                textEl.value = '';
+                preview.src = '';
+                urlEl.textContent = '—';
+                mdEl.textContent = '—';
+                downloadA.href = '#';
+                status.textContent = '';
+            });
+
+            // Generate on load sample
+            window.addEventListener('load', () => {
+                // Do not auto-generate; let user click.
+            });
+        })();
+    </script>
+</body>
+</html>
