@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Code Project Overview</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        h1 { color: #333; border-bottom: 3px solid #007bff; padding-bottom: 10px; }
+        h2 { color: #007bff; margin-top: 30px; }
+        .project-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .project-iframe {
+            width: 100%;
+            height: 600px; /* Adjust as needed */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .summary-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .prompt-container {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .prompt-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Vibe Code Project Summaries and Embeddings</h1>
+
+    <h2>Project Summaries</h2>
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Main Idea</th>
+                <th>API Used</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Word Cloud Generator</td>
+                <td>Generate a word cloud visualization from user-pasted text.</td>
+                <td>QuickChart.io Word Cloud API</td>
+            </tr>
+            <tr>
+                <td>Pokemon Search</td>
+                <td>Look up detailed information about a Pokémon character by searching its name.</td>
+                <td>PokeAPI</td>
+            </tr>
+            <tr>
+                <td>What's for Dinner? (Recipe Search)</td>
+                <td>Return recipe suggestions based on a user-provided main ingredient.</td>
+                <td>TheMealDB</td>
+            </tr>
+            <tr>
+                <td>Weather by IP</td>
+                <td>Automatically determine the user's location via IP and display the local weather forecast.</td>
+                <td>IPAPI.co and Open-Meteo</td>
+            </tr>
+            <tr>
+                <td>Star Wars Character Search</td>
+                <td>Retrieve information about a Star Wars character by searching their name.</td>
+                <td>SWAPI - Star Wars API</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Embedded Applications</h2>
+    
+    <div class="project-container">
+        <h3>Word Cloud Generator</h3>
+        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/wordcloud.html" title="Word Cloud Generator App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>Pokemon Search</h3>
+        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/pokemon.html" title="Pokemon Search App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>What's for Dinner? (Recipe Search)</h3>
+        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/recipe.html" title="Recipe Search App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>Weather by IP</h3>
+        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/weatherIP.html" title="Weather by IP App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>Star Wars Character Search</h3>
+        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/starwars.html" title="Star Wars Character Search App"></iframe>
+    </div>
+
+    <h2>Copy-Pasteable Prompts</h2>
+
+    <div class="prompt-container">
+        <div class="prompt-title">Full Text Copy of the Prompt:</div>
+        <div id="fullPrompt">
+Main idea of app
+Main prompt
+Extra information about API
+Example generated page
+Word cloud from text
+Generate an html and javascript web app that just uses a single html document.  I want to be able to paste a pile of text and have https://quickchart.io/wordcloud make a word cloud from it
+https://gtacaus.github.io/vibecode/wordcloud.html
+Pokemon search
+Generate an html and javascript web app that just uses a single html document.  I want to search by name, and get results about a Pokemon character just by searching their name.  Use Pokeapi.co API to get the data.
+https://pokeapi.co/api/v2/
+pokemon/ditto
+Submit
+Need a hint? Try pokemon/ditto, pokemon-species/aegislash, type/3, ability/battle-armor, or pokemon?limit=100000&offset=0.
+Direct link to results: https://pokeapi.co/api/v2/pokemon/ditto
+Resource for ditto
+name:"limber"
+url:"https://pokeapi.co/api/v2/ability/7/"
+Programming
+is_hidden:false
+slot:1
+name:"imposter"
+url:"https://pokeapi.co/api/v2/ability/150/"
+is_hidden:true
+slot:3
+base_experience:101
+latest:"https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/132.ogg"
+legacy:"https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/132.ogg"
+name:"ditto"
+url:"https://pokeapi.co/api/v2/pokemon-form/132/"
+height:3
+name:"metal-powder"
+url:"https://pokeapi.co/api/v2/item/234/"
+name:"quick-powder"
+url:"https://pokeapi.co/api/v2/item/251/"
+id:132
+is_default:true
+location_area_encounters:"https://pokeapi.co/api/v2/pokemon/132/encounters"
+name:"transform"
+url:"https://pokeapi.co/api/v2/move/144/"
+name:"ditto"
+order:214
+name:"generation-iv"
+url:"https://pokeapi.co/api/v2/generation/4/"
+past_types:
+name:"ditto"
+url:"https://pokeapi.co/api/v2/pokemon-species/132/"
+slot:1
+name:"normal"
+url:"https://pokeapi.co/api/v2/type/1/"
+weight:40
+https://gtacaus.github.io/vibecode/pokemon.html
+What’s for dinner?
+Generate an html and javascript web app that just uses a single html document.  I want it to take a user query and use themealdb.com/api to return some possible recipes to cook for dinner.  Is this possible?
+I have API:
+Filter by main ingredient
+www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast
+https://gtacaus.github.io/vibecode/recipe.html
+Weather by internet location determined by your IP address
+Generate an html and javascript web app that just uses a single html document.  I want it to search my ip via IPAPI.co and give me local weather using open-meteo API. 
+https://gtacaus.github.io/vibecode/weatherIP.html
+Starwars character search
+Generate an html and javascript web app that just uses a single html document.  I want to search by name, and get results about a star wars character just by searching their name.  Use SWAPI Star Wars API to get the data.
+https://free-apis.github.io/#/browse
+and creates a summary of each of the main idea of each website generated by vibe coding, and also includes each website as an iframe.  I want the prompt to be copy pasteable as a full text copy of the prompt and also as an @gemini that i can paste into my omnibar to query gemini
+        </div>
+        <br>
+        <div class="prompt-title">@Gemini Omnibar Query:</div>
+        <div id="omnibarPrompt">
+@gemini summarize the main idea and API of the following web apps and create a single HTML page with a summary table and an iframe for each: Word cloud from text (uses https://quickchart.io/wordcloud) at https://gtacaus.github.io/vibecode/wordcloud.html; Pokemon search (uses Pokeapi.co) at https://gtacaus.github.io/vibecode/pokemon.html; What’s for dinner? (uses themealdb.com/api) at https://gtacaus.github.io/vibecode/recipe.html; Weather by internet location determined by your IP address (uses IPAPI.co and open-meteo API) at https://gtacaus.github.io/vibecode/weatherIP.html; Starwars character search (uses SWAPI) at https://gtacaus.github.io/vibecode/starwars.html
+        </div>
+    </div>
+
+</body>
+</html>
