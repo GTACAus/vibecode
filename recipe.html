@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dinner Ideas — TheMealDB</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 0; padding: 20px; background:#f7f7f8; color:#111; }
+        header { display:flex; gap:10px; align-items:center; margin-bottom:18px; }
+        input[type="search"] { padding:10px 12px; font-size:16px; border-radius:8px; border:1px solid #d0d0d5; width:320px; }
+        button { padding:10px 14px; border-radius:8px; border:0; background:#0b6efd; color:white; cursor:pointer; font-weight:600; }
+        button:disabled { opacity:.6; cursor:default; }
+        .note { color:#555; font-size:14px; margin-left:8px; }
+        #results { display:grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin-top:18px; }
+        .card { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,.06); overflow:hidden; display:flex; flex-direction:column; cursor:pointer; text-decoration:none; color:inherit; }
+        .thumb { width:100%; height:140px; object-fit:cover; display:block; }
+        .card-body { padding:10px; display:flex; gap:8px; align-items:center; }
+        .meal-title { font-weight:700; font-size:15px; flex:1; }
+        .meal-sub { font-size:13px; color:#666; }
+        #detail { margin-top:20px; background:white; padding:16px; border-radius:10px; box-shadow:0 1px 6px rgba(0,0,0,.05); display:none; }
+        #detail img { max-width:260px; float:right; margin-left:12px; border-radius:8px; }
+        .ingredients { margin-top:6px; }
+        .loading { color:#666; margin-top:12px; }
+        .empty { color:#666; margin-top:12px; font-style:italic; }
+        @media (max-width:600px){ header{flex-direction:column; align-items:stretch} input[type="search"]{width:100%} #detail img{float:none;margin:0 0 12px 0;max-width:100%} }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin:0;font-size:20px">Dinner ideas</h1>
+        <div style="flex:1"></div>
+        <label style="display:flex;align-items:center;gap:8px">
+            <input id="query" type="search" placeholder="Enter main ingredient (e.g. chicken, beef, potato)" />
+            <button id="searchBtn">Search</button>
+        </label>
+    </header>
+
+    <div id="status" class="note">Tip: use a single main ingredient like "chicken", "beef", "salmon", "potato".</div>
+
+    <div id="results" aria-live="polite"></div>
+
+    <div id="detail" role="region" aria-labelledby="detailTitle">
+        <h2 id="detailTitle"></h2>
+        <img id="detailImg" alt="" />
+        <div id="detailCategory" class="meal-sub"></div>
+        <div id="detailArea" class="meal-sub"></div>
+        <div id="detailInstructions"></div>
+        <h3>Ingredients</h3>
+        <ul id="detailIngredients" class="ingredients"></ul>
+        <div style="clear:both"></div>
+    </div>
+
+    <script>
+        // Single-file web app using TheMealDB filter and lookup endpoints
+        (function(){
+            const searchBtn = document.getElementById('searchBtn');
+            const queryInput = document.getElementById('query');
+            const resultsEl = document.getElementById('results');
+            const statusEl = document.getElementById('status');
+            const detailEl = document.getElementById('detail');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailImg = document.getElementById('detailImg');
+            const detailCategory = document.getElementById('detailCategory');
+            const detailArea = document.getElementById('detailArea');
+            const detailInstructions = document.getElementById('detailInstructions');
+            const detailIngredients = document.getElementById('detailIngredients');
+
+            function setLoading(on, message){
+                if(on){
+                    statusEl.textContent = message || 'Loading...';
+                    searchBtn.disabled = true;
+                } else {
+                    statusEl.textContent = 'Tip: use a single main ingredient like "chicken", "beef", "salmon", "potato".';
+                    searchBtn.disabled = false;
+                }
+            }
+
+            function clearResults(){
+                resultsEl.innerHTML = '';
+                detailEl.style.display = 'none';
+                detailIngredients.innerHTML = '';
+            }
+
+            function createCard(meal){
+                const a = document.createElement('a');
+                a.className = 'card';
+                a.href = '#';
+                a.dataset.id = meal.idMeal;
+                a.title = meal.strMeal;
+                a.innerHTML = `
+                    <img class="thumb" src="${meal.strMealThumb}" alt="${escapeHtml(meal.strMeal)}" />
+                    <div class="card-body">
+                        <div class="meal-title">${escapeHtml(meal.strMeal)}</div>
+                        <div class="meal-sub">See details</div>
+                    </div>
+                `;
+                a.addEventListener('click', (e)=>{
+                    e.preventDefault();
+                    fetchMealDetails(meal.idMeal);
+                });
+                return a;
+            }
+
+            function escapeHtml(text){
+                return String(text).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+            }
+
+            async function searchIngredient(ingredient){
+                if(!ingredient) {
+                    statusEl.textContent = 'Please enter an ingredient to search.';
+                    return;
+                }
+                clearResults();
+                setLoading(true, 'Searching for recipes with "' + ingredient + '"...');
+                try {
+                    const encoded = encodeURIComponent(ingredient.trim());
+                    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encoded}`;
+                    const res = await fetch(url);
+                    if(!res.ok) throw new Error('Network error');
+                    const data = await res.json();
+                    setLoading(false);
+                    if(!data.meals){
+                        resultsEl.innerHTML = `<div class="empty">No recipes found for "${escapeHtml(ingredient)}". Try another ingredient.</div>`;
+                        return;
+                    }
+                    data.meals.forEach(meal => resultsEl.appendChild(createCard(meal)));
+                } catch(err){
+                    setLoading(false);
+                    resultsEl.innerHTML = `<div class="empty">Failed to fetch results. ${escapeHtml(err.message)}</div>`;
+                }
+            }
+
+            async function fetchMealDetails(id){
+                if(!id) return;
+                setLoading(true, 'Loading recipe details...');
+                try {
+                    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${encodeURIComponent(id)}`;
+                    const res = await fetch(url);
+                    if(!res.ok) throw new Error('Network error');
+                    const data = await res.json();
+                    setLoading(false);
+                    if(!data.meals || !data.meals[0]) {
+                        statusEl.textContent = 'Recipe details not found.';
+                        return;
+                    }
+                    const meal = data.meals[0];
+                    showDetails(meal);
+                } catch(err){
+                    setLoading(false);
+                    statusEl.textContent = 'Failed to load details: ' + err.message;
+                }
+            }
+
+            function showDetails(meal){
+                detailTitle.textContent = meal.strMeal || '';
+                detailImg.src = meal.strMealThumb || '';
+                detailImg.alt = meal.strMeal || 'Meal image';
+                detailCategory.textContent = meal.strCategory ? 'Category: ' + meal.strCategory : '';
+                detailArea.textContent = meal.strArea ? 'Cuisine: ' + meal.strArea : '';
+                detailInstructions.textContent = meal.strInstructions || '';
+                detailIngredients.innerHTML = '';
+                for(let i=1;i<=20;i++){
+                    const ing = meal['strIngredient'+i];
+                    const measure = meal['strMeasure'+i];
+                    if(ing && ing.trim()){
+                        const li = document.createElement('li');
+                        li.textContent = (measure? measure.trim() + ' ' : '') + ing.trim();
+                        detailIngredients.appendChild(li);
+                    }
+                }
+                detailEl.style.display = 'block';
+                detailEl.scrollIntoView({behavior:'smooth', block:'start'});
+            }
+
+            // Event listeners
+            searchBtn.addEventListener('click', ()=> searchIngredient(queryInput.value));
+            queryInput.addEventListener('keydown', (e)=>{
+                if(e.key === 'Enter') searchIngredient(queryInput.value);
+            });
+
+            // Small UX: allow clicking a common suggestion from status text
+            statusEl.addEventListener('click', ()=>{
+                queryInput.value = 'chicken';
+                searchIngredient('chicken');
+            });
+        })();
+    </script>
+</body>
+</html>
