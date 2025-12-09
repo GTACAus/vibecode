@@ -27,6 +27,25 @@
         .error { color:#b91c1c; font-weight:600; }
         footer { margin-top:12px; font-size:13px; color:#666; }
         @media (max-width:520px){ dl { grid-template-columns:120px 1fr; } }
+
+        .back-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #0a84ff;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 10000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.back-button:hover {
+    background: #0066cc;
+}
+
     </style>
 </head>
 <body>
@@ -34,6 +53,7 @@
         <header>
             <h1>Star Wars Character Search</h1>
         </header>
+<a href="https://gtacaus.github.io/vibecode/index.html" class="back-button">⟵ Back</a>
 
         <div class="search" aria-label="Search form">
             <input id="q" type="search" placeholder="Type a character name (e.g. Luke Skywalker)" aria-label="Search character" />
