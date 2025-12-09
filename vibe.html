@@ -4,30 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examples</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* GTAC HERO COLOURS AS CSS VARIABLES */
+        :root {
+            --eggshell: #F9F6E7;
+            --sodium-flame: #FF6D3A;
+            --cadmium-yellow: #FFCD1F;
+            --chlorophyll-green: #00BC74;
+            --aquamarine: #6BE7BE;
+            --lavender: #C0ADFF;
+            --cobalt-blue: #4C34E5;
+            --onyx: #272A24;
+
+            /* Helper Tints/Shades for accessibility or borders */
+            --dark-accent: var(--cobalt-blue);
+            --secondary-accent: var(--chlorophyll-green);
+            --tertiary-accent: var(--sodium-flame);
+            --text-on-light: var(--onyx);
+            --text-on-dark: var(--eggshell);
+            
+            /* Code/UI Colors */
+            --code-bg: var(--aquamarine); /* Using Aquamarine for code blocks */
+            --copy-button-bg: var(--chlorophyll-green); /* Green for copy buttons */
+        }
+
         /* General Styling */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; color: #343a40; }
-        h1 { color: #007bff; border-bottom: 4px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
-        h2 { color: #343a40; margin-top: 40px; margin-bottom: 20px; border-left: 5px solid #28a745; padding-left: 10px; }
+        body { 
+            /* APPLY FIGTREE FONT */
+            font-family: 'Figtree', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            /* Background: Eggshell (light base) */
+            background-color: var(--eggshell); 
+            /* Primary Text: Onyx (on light background) */
+            color: var(--text-on-light); 
+        }
+
+        /* HEADER BRANDING (New Container for Title and Logo) */
+        .header-branding {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+        }
+        .gtac-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        
+        /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
+        h1 { 
+            color: var(--cobalt-blue); 
+            border-bottom: 4px solid var(--sodium-flame); /* Bold, bright accent */
+            padding-bottom: 10px; 
+            margin-bottom: 0; /* Adjusted to be controlled by .header-branding */
+        }
+
+        /* H2: Onyx on Eggshell, Border: Chlorophyll Green */
+        h2 { 
+            color: var(--text-on-light); 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--chlorophyll-green); 
+            padding-left: 10px; 
+        }
         
         /* Table Styling */
         .summary-table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .summary-table th, .summary-table td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
-        .summary-table th { background-color: #007bff; color: white; font-weight: 600; }
-        .summary-table tr:nth-child(even) { background-color: #f2f2f2; }
+        .summary-table th, .summary-table td { 
+            border: 1px solid var(--aquamarine); 
+            padding: 12px; 
+            text-align: left; 
+        }
+        .summary-table th { 
+            background-color: var(--cobalt-blue); 
+            color: var(--text-on-dark); 
+            font-weight: 700; 
+        }
+        .summary-table tr:nth-child(even) { background-color: var(--aquamarine); } 
 
         /* Project Container & Separators */
         .project-container {
             margin-top: 30px;
             padding: 25px;
-            border: 1px solid #e9ecef;
+            /* Border: Aquamarine */
+            border: 1px solid var(--aquamarine);
             border-radius: 10px;
-            background-color: #ffffff;
+            /* Background: Eggshell */
+            background-color: var(--eggshell);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .project-container h3 {
-            color: #17a2b8;
-            border-bottom: 2px dashed #17a2b8;
+            /* H3: Cobalt Blue, Border: Aquamarine */
+            color: var(--cobalt-blue);
+            border-bottom: 2px dashed var(--aquamarine);
             padding-bottom: 5px;
             margin-bottom: 15px;
         }
@@ -35,8 +107,8 @@
         /* iFrame Styling */
         .project-iframe {
             width: 100%;
-            height: 800px; /* Increased height */
-            border: 1px solid #adb5bd;
+            height: 800px;
+            border: 1px solid var(--onyx); 
             border-radius: 5px;
             margin-top: 15px;
             box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
@@ -44,26 +116,29 @@
 
         /* Prompt Styling */
         .prompt-title {
-            font-weight: bold;
+            font-weight: 700;
             margin-top: 15px;
             margin-bottom: 5px;
-            color: #343a40;
+            color: var(--text-on-light);
         }
         .prompt-code {
-            background-color: #e9ecef;
+            /* Code block uses Aquamarine background */
+            background-color: var(--code-bg);
             padding: 10px;
             border-radius: 5px;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
             overflow-x: auto;
-            white-space: pre-wrap; /* Allows wrapping */
-            flex-grow: 1; /* Allows the code block to fill the space */
+            white-space: pre-wrap;
+            flex-grow: 1;
+            color: var(--text-on-light); 
         }
 
         /* Button Styling */
         .copy-button {
-            background-color: #28a745;
-            color: white;
+            /* Copy button uses Chlorophyll Green */
+            background-color: var(--copy-button-bg);
+            color: var(--text-on-dark); 
             border: none;
             padding: 8px 15px;
             border-radius: 5px;
@@ -71,10 +146,11 @@
             margin-left: 10px;
             font-size: 0.9em;
             transition: background-color 0.3s;
-            flex-shrink: 0; /* Prevents button from shrinking */
+            flex-shrink: 0;
         }
         .copy-button:hover {
-            background-color: #218838;
+            /* Slightly darker green on hover */
+            background-color: #008f5d; 
         }
         .button-group {
             display: flex;
@@ -85,8 +161,12 @@
 </head>
 <body>
 
-    <h1>🚀 Vibe Code Project Examples</h1>
-    <p> These projects all used an Application Programming Interface (API) to communicate with other websites for information or data.  APIs have defined rules and tools that allows different apps to communicate and interact with each other. The prompt to generate each example application came from a <b>maximum</b> of four sentences.  You can find the prompt that was used to generate the web app below each example.</p>
+    <div class="header-branding">
+        <h1>🚀 Vibe Code Project Examples</h1>
+        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
+    </div>
+
+    <p> These projects all used an **Application Programming Interface (API)** to communicate with other websites for information or data.  **APIs** have defined rules and tools that allows different apps to communicate and interact with each other. The prompt to generate each example application came from a <b>maximum</b> of four sentences.  You can find the prompt that was used to generate the web app below each example.</p>
     <div class="project-container">
         <h2> Project Summaries</h2>
         <table class="summary-table">
