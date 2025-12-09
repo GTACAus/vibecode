@@ -150,6 +150,30 @@
             background-color: var(--sodium-flame);
             margin: 20px 0;
         }
+        .floating-sidebar {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: white;
+          border: 2px solid #ddd;
+          padding: 12px 16px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          width: 180px;
+          z-index: 9999;
+        }
+        
+        .floating-sidebar a {
+          display: block;
+          margin: 8px 0;
+          text-decoration: none;
+          color: #333;
+          font-weight: 600;
+        }
+        
+        .floating-sidebar a:hover {
+          color: #0a84ff;
+        }
 
     </style>
 </head>
@@ -159,6 +183,11 @@
         <h1>🚀 GTAC - Vibe Coding Workshop</h1>
         <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
     </div>
+<div class="floating-sidebar">
+  <a href="#setup">Setup & Installation</a>
+  <a href="#vibe-code">Vibe Code Examples</a>
+  <a href="#gtac-resources">GTAC Resources</a>
+</div>
 
     <div class="content-container">
         <h2>Workshop Flowchart</h2>
@@ -166,7 +195,7 @@
             
         </div>
 
-        <h2>Setup and Installation</h2>
+        <h2 id="setup">Setup and Installation</h2>
         <a href="install.html" class="primary-link">Install and configure Visual Studio Code</a>
         <p>There are a few installation, setup and login steps we need to complete before we can begin:</p>
         <ul>
@@ -178,7 +207,7 @@
 
         <hr>
 
-        <h2>Vibe Code Project Examples</h2>
+        <h2 id="vibe-code">Vibe Code Project Examples</h2>
         <a href="vibe.html" class="primary-link">Vibe Code Project Examples</a>
         <p>The prompt to generate each example application came from a <strong>maximum</strong> of four sentences:</p>
         <ul>
@@ -191,7 +220,7 @@
 
         <hr>
 
-        <h2>Code on your USB and GTAC Github Repositories</h2>
+        <h2 id="gtac-resources">Code on your USB and GTAC Github Repositories</h2>
         <a href="https://scamper.gtac.edu.au/" class="primary-link">SCAMPER Design Thinking tool</a><br>
         <a href="https://gtacaus.github.io/vce101" class="primary-link">Inquiry into cell function using microscopy: Student Logbook</a><br>
         <a href="https://gtacaus.github.io/vibecode/weatherIP.html" class="primary-link">Weather by IP</a><br>
