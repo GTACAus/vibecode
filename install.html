@@ -4,20 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTAC - Vibe Coding Workshop Installation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* General Styling */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; color: #343a40; }
-        h1 { color: #007bff; border-bottom: 4px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
-        h2 { color: #343a40; margin-top: 40px; margin-bottom: 20px; border-left: 5px solid #28a745; padding-left: 10px; }
-        h3 { color: #17a2b8; border-bottom: 2px dashed #17a2b8; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; }
+        /* GTAC HERO COLOURS AS CSS VARIABLES */
+        :root {
+            --eggshell: #F9F6E7;
+            --sodium-flame: #FF6D3A;
+            --cadmium-yellow: #FFCD1F;
+            --chlorophyll-green: #00BC74;
+            --aquamarine: #6BE7BE;
+            --lavender: #C0ADFF;
+            --cobalt-blue: #4C34E5;
+            --onyx: #272A24;
 
-        /* Content Container */
+            /* Helper Tints/Shades for accessibility or borders */
+            --dark-accent: var(--cobalt-blue);
+            --secondary-accent: var(--chlorophyll-green);
+            --tertiary-accent: var(--sodium-flame);
+            --text-on-light: var(--onyx);
+            --text-on-dark: var(--eggshell);
+            
+            /* UPDATED: For troubleshooting notes (Lavender background, Onyx text/border) */
+            --warning-bg: var(--lavender);
+            --warning-border: var(--onyx);
+        }
+
+        /* General Styling */
+        body { 
+            /* APPLY FIGTREE FONT */
+            font-family: 'Figtree', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            /* Background: Eggshell (light base) */
+            background-color: var(--eggshell); 
+            /* Primary Text: Onyx (on light background) */
+            color: var(--text-on-light); 
+        }
+
+        /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
+        h1 { 
+            color: var(--cobalt-blue); 
+            border-bottom: 4px solid var(--sodium-flame); /* Bold, bright accent */
+            padding-bottom: 10px; 
+            margin-bottom: 30px; 
+        }
+
+        /* H2: Onyx on Eggshell, Border: Chlorophyll Green */
+        h2 { 
+            color: var(--text-on-light); 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--chlorophyll-green); 
+            padding-left: 10px; 
+        }
+
+        /* H3: Cobalt Blue, Border: Aquamarine */
+        h3 { 
+            color: var(--cobalt-blue); 
+            border-bottom: 2px dashed var(--aquamarine); 
+            padding-bottom: 5px; 
+            margin-top: 30px; 
+            margin-bottom: 15px; 
+        }
+
+        /* Content Container (Background: Eggshell, Border: Aquamarine) */
         .content-container {
             margin-top: 30px;
             padding: 25px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--aquamarine);
             border-radius: 10px;
-            background-color: #ffffff;
+            background-color: var(--eggshell);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
@@ -30,37 +87,57 @@
         .step-list > li {
             margin-bottom: 25px;
             padding: 15px;
-            border: 1px solid #dee2e6;
+            /* Border: Aquamarine */
+            border: 1px solid var(--aquamarine);
             border-radius: 5px;
-            background-color: #f8f9fa;
+            /* Background: Eggshell (just a slightly different look) */
+            background-color: var(--eggshell);
         }
         .step-list > li strong {
-            color: #007bff;
+            /* Highlight key terms in Cobalt Blue */
+            color: var(--cobalt-blue); 
         }
         .step-list > li p {
             margin-top: 10px;
         }
 
-        /* Image Styling - New styles for actual images */
+        /* Image Styling - Border set to Onyx */
         .step-image {
             max-width: 100%;
             height: auto;
-            border: 1px solid #adb5bd;
+            border: 1px solid var(--onyx);
             border-radius: 3px;
             display: block;
             margin: 10px 0 15px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Image Placeholder Styling (Removed but kept class for reference, will be replaced by img) */
-        /* .image-placeholder { ... } */
-
+        /* Troubleshooting Note (Styled with Lavender/Onyx) */
         .troubleshooting-note {
-            background-color: #fff3cd; /* Light warning color */
-            border-left: 5px solid #ffc107;
+            /* Background: Lavender */
+            background-color: var(--warning-bg); 
+            /* Border: Onyx */
+            border-left: 5px solid var(--warning-border);
             padding: 10px 15px;
             margin-top: 20px;
             border-radius: 3px;
+            /* Text: Onyx (darkest color, great contrast on Lavender) */
+            color: var(--text-on-light); 
+        }
+        
+        .troubleshooting-note h4 {
+             /* H4 in the note uses Onyx */
+            color: var(--text-on-light);
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Horizontal Rule - Using Sodium Flame for separation */
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: var(--sodium-flame);
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -160,7 +237,7 @@
         <img src="26.png" alt="Final Step: Prompt being typed into the chat" class="step-image">
         <p>Once you enter your prompt, it will prompt you back to select a model. <strong>GPT5 mini</strong> or <strong>Claude Haiki 4.5</strong> will work just fine.</p>
         <img src="28.png" alt="Final Step: Model selection prompt" class="step-image">
-        <p>Code should start to populate your index.html documents.  Your Live Preview window should show the first iteration of your app.  Hooray!</p>
+        <p>Code should start to populate your index.html documents. Your Live Preview window should show the first iteration of your app. Hooray!</p>
         <img src="29.png" alt="Final Step: Model selection prompt" class="step-image">
     </div>
 
