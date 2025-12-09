@@ -25,7 +25,7 @@
             --text-on-light: var(--onyx);
             --text-on-dark: var(--eggshell);
             
-            /* UPDATED: For troubleshooting notes (Lavender background, Onyx text/border) */
+            /* Troubleshooting notes (Lavender background, Onyx text/border) */
             --warning-bg: var(--lavender);
             --warning-border: var(--onyx);
         }
@@ -41,13 +41,25 @@
             /* Primary Text: Onyx (on light background) */
             color: var(--text-on-light); 
         }
+        
+        /* HEADER BRANDING (New Container for Title and Logo) */
+        .header-branding {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+        }
+        .gtac-logo {
+            max-height: 50px;
+            width: auto;
+        }
 
         /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
         h1 { 
             color: var(--cobalt-blue); 
             border-bottom: 4px solid var(--sodium-flame); /* Bold, bright accent */
             padding-bottom: 10px; 
-            margin-bottom: 30px; 
+            margin-bottom: 0; /* Adjusted to be controlled by .header-branding */
         }
 
         /* H2: Onyx on Eggshell, Border: Chlorophyll Green */
@@ -78,7 +90,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* Steps List Styling */
+        /* Steps List Styling (unchanged, using default list styles now) */
         .step-list {
             list-style-type: none;
             padding-left: 0;
@@ -90,7 +102,7 @@
             /* Border: Aquamarine */
             border: 1px solid var(--aquamarine);
             border-radius: 5px;
-            /* Background: Eggshell (just a slightly different look) */
+            /* Background: Eggshell */
             background-color: var(--eggshell);
         }
         .step-list > li strong {
@@ -121,7 +133,7 @@
             padding: 10px 15px;
             margin-top: 20px;
             border-radius: 3px;
-            /* Text: Onyx (darkest color, great contrast on Lavender) */
+            /* Text: Onyx */
             color: var(--text-on-light); 
         }
         
@@ -143,7 +155,10 @@
 </head>
 <body>
 
-    <h1>🚀 GTAC - Vibe Coding Workshop Setup</h1>
+    <div class="header-branding">
+        <h1>🚀 GTAC - Vibe Coding Workshop Setup</h1>
+        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
+    </div>
 
     <div class="content-container">
         <h2>Prerequisites</h2>
