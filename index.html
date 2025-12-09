@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examples</title>
+    <title>GTAC - Vibe Coding Workshop</title>
     <style>
         /* General Styling */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; color: #343a40; }
         h1 { color: #007bff; border-bottom: 4px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
         h2 { color: #343a40; margin-top: 40px; margin-bottom: 20px; border-left: 5px solid #28a745; padding-left: 10px; }
-        
-        /* Table Styling */
-        .summary-table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .summary-table th, .summary-table td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
-        .summary-table th { background-color: #007bff; color: white; font-weight: 600; }
-        .summary-table tr:nth-child(even) { background-color: #f2f2f2; }
+        h3 { color: #17a2b8; border-bottom: 2px dashed #17a2b8; padding-bottom: 5px; margin-bottom: 15px; }
 
-        /* Project Container & Separators */
-        .project-container {
+        /* Project Container & Separators - Reused for main content sections */
+        .content-container {
             margin-top: 30px;
             padding: 25px;
             border: 1px solid #e9ecef;
@@ -25,217 +20,88 @@
             background-color: #ffffff;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
-        .project-container h3 {
-            color: #17a2b8;
-            border-bottom: 2px dashed #17a2b8;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
 
-        /* iFrame Styling */
-        .project-iframe {
-            width: 100%;
-            height: 800px; /* Increased height */
-            border: 1px solid #adb5bd;
-            border-radius: 5px;
-            margin-top: 15px;
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
-        }
-
-        /* Prompt Styling */
-        .prompt-title {
+        /* Link Styling */
+        .primary-link {
+            font-size: 1.25em;
             font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            color: #343a40;
+            color: #007bff;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 10px;
+            transition: color 0.3s;
         }
-        .prompt-code {
-            background-color: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            overflow-x: auto;
-            white-space: pre-wrap; /* Allows wrapping */
-            flex-grow: 1; /* Allows the code block to fill the space */
+        .primary-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
         }
 
-        /* Button Styling */
-        .copy-button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 15px;
+        /* List Styling */
+        ul {
+            list-style-type: '👉 '; /* Custom bullet point */
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Image Placeholder Styling */
+        .flowchart-placeholder {
+            width: 100%;
+            height: 400px;
+            background-color: #e9ecef;
+            border: 2px dashed #adb5bd;
             border-radius: 5px;
-            cursor: pointer;
-            margin-left: 10px;
-            font-size: 0.9em;
-            transition: background-color 0.3s;
-            flex-shrink: 0; /* Prevents button from shrinking */
-        }
-        .copy-button:hover {
-            background-color: #218838;
-        }
-        .button-group {
             display: flex;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #6c757d;
+            font-size: 1.2em;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <h1>🚀 Vibe Code Project Examples</h1>
-    <p> These projects all used an Application Programming Interface (API) to communicate with other websites for information or data.  APIs have defined rules and tools that allows different apps to communicate and interact with each other. The prompt to generate each example application came from a <b>maximum</b> of four sentences.  You can find the prompt that was used to generate the web app below each example.</p>
-    <div class="project-container">
-        <h2> Project Summaries</h2>
-        <table class="summary-table">
-            <thead>
-                <tr>
-                    <th>Project Name</th>
-                    <th>Main Idea</th>
-                    <th>API Used</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Word Cloud Generator</td>
-                    <td>Generate a word cloud visualization from user-pasted text.</td>
-                    <td>QuickChart.io Word Cloud API</td>
-                </tr>
-                <tr>
-                    <td>Pokemon Search</td>
-                    <td>Look up detailed information about a Pokémon character by searching its name.</td>
-                    <td>PokeAPI</td>
-                </tr>
-                <tr>
-                    <td>What's for Dinner? (Recipe Search)</td>
-                    <td>Return recipe suggestions based on a user-provided main ingredient.</td>
-                    <td>TheMealDB</td>
-                </tr>
-                <tr>
-                    <td>Weather by IP</td>
-                    <td>Automatically determine the user's location via IP and display the local weather forecast.</td>
-                    <td>IPAPI.co and Open-Meteo</td>
-                </tr>
-                <tr>
-                    <td>Star Wars Character Search</td>
-                    <td>Retrieve information about a Star Wars character by searching their name.</td>
-                    <td>SWAPI - Star Wars API</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h1>🚀 GTAC - Vibe Coding Workshop</h1>
 
-    <div class="project-container">
-        <h3>Word Cloud Generator</h3>
-        <p>Generates a word cloud from any text you paste into the box, using the QuickChart.io API.</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/wordcloud.html" title="Word Cloud Generator App"></iframe>
-        
-        <div class="prompt-title">Full Prompt:</div>
-        <div class="button-group">
-            <div class="prompt-code" id="prompt-wordcloud-full">
-Generate an html and javascript web app that just uses a single html document. I want to be able to paste a pile of text and have https://quickchart.io/wordcloud make a word cloud from it.
-            </div>
-            <button class="copy-button" onclick="copyToClipboard('prompt-wordcloud-full')">Copy</button>
-        </div>
-    </div>
-
-    <div class="project-container">
-        <h3>Pokemon Search</h3>
-        <p>Search for a Pokémon by name and retrieve detailed information from the PokeAPI.</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/pokemon.html" title="Pokemon Search App"></iframe>
-
-        <div class="prompt-title">Full Prompt:</div>
-        <div class="button-group">
-            <div class="prompt-code" id="prompt-pokemon-full">
-Generate an html and javascript web app that just uses a single html document. I want to search by name, and get results about a Pokemon character just by searching their name. Use Pokeapi.co API to get the data. API base: https://pokeapi.co/api/v2/. Example: pokemon/ditto
-            </div>
-            <button class="copy-button" onclick="copyToClipboard('prompt-pokemon-full')">Copy</button>
-        </div>
-    </div>
-
-    <div class="project-container">
-        <h3>What's for Dinner? (Recipe Search)</h3>
-        <p>Enter a main ingredient to get possible recipes to cook for dinner using TheMealDB API.</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/recipe.html" title="Recipe Search App"></iframe>
-        
-        <div class="prompt-title">Full Prompt:</div>
-        <div class="button-group">
-            <div class="prompt-code" id="prompt-recipe-full">
-Generate an html and javascript web app that just uses a single html document. I want it to take a user query and use themealdb.com/api to return some possible recipes to cook for dinner. Filter by main ingredient API example: www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast
-            </div>
-            <button class="copy-button" onclick="copyToClipboard('prompt-recipe-full')">Copy</button>
-        </div>
-    </div>
-
-    <div class="project-container">
-        <h3>Weather by Internet Location</h3>
-        <p>Uses your IP address to determine your location via IPAPI.co and then retrieves local weather using Open-Meteo.</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/weatherIP.html" title="Weather by IP App"></iframe>
-        
-        <div class="prompt-title">Full Prompt:</div>
-        <div class="button-group">
-            <div class="prompt-code" id="prompt-weather-full">
-Generate an html and javascript web app that just uses a single html document. I want it to search my ip via IPAPI.co and give me local weather using open-meteo API.
-            </div>
-            <button class="copy-button" onclick="copyToClipboard('prompt-weather-full')">Copy</button>
-        </div>
-    </div>
-
-    <div class="project-container">
-        <h3>Star Wars Character Search</h3>
-        <p>Search for a Star Wars character by name and get details using the SWAPI (Star Wars API).</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/swapi.html" title="Star Wars Character Search App"></iframe>
-        
-        <div class="prompt-title">Full Prompt:</div>
-        <div class="button-group">
-            <div class="prompt-code" id="prompt-starwars-full">
-Generate an html and javascript web app that just uses a single html document. I want to search by name, and get results about a star wars character just by searching their name. Use SWAPI Star Wars API to get the data.
-            </div>
-            <button class="copy-button" onclick="copyToClipboard('prompt-starwars-full')">Copy</button>
-        </div>
-    </div>
-
-
-
-    <script>
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            const textToCopy = element.textContent.trim();
+    <div class="content-container">
+        <h2>Workshop Flowchart</h2>
+        <div class="flowchart-placeholder">
             
-            // Use the modern navigator.clipboard API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => {
-                        alert("Copied to clipboard: " + textToCopy.substring(0, 50) + "...");
-                    })
-                    .catch(err => {
-                        console.error('Could not copy text: ', err);
-                        fallbackCopy(textToCopy);
-                    });
-            } else {
-                // Fallback for older browsers
-                fallbackCopy(textToCopy);
-            }
-        }
+        </div>
 
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed'; 
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                alert("Copied to clipboard (fallback): " + text.substring(0, 50) + "...");
-            } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
-            }
-            document.body.removeChild(textarea);
-        }
-    </script>
+        <h2>Setup and Installation</h2>
+        <a href="install.html" class="primary-link">Install and configure Visual Studio Code</a>
+        <p>There are a few installation, setup and login steps we need to complete before we can begin:</p>
+        <ul>
+            <li>install **Visual Studio Code**</li>
+            <li>install a **“Live Preview”** extension for Visual Studio Code</li>
+            <li>log in using a Google or a Department of Education email account and register for **GitHub** (to enable AI assistance)</li>
+            <li>select an **AI model** to assist us</li>
+        </ul>
+
+        <hr>
+
+        <h2>Vibe Code Project Examples</h2>
+        <a href="vibe.html" class="primary-link">Vibe Code Project Examples</a>
+        <p>The prompt to generate each example application came from a **maximum** of four sentences:</p>
+        <ul>
+            <li>**Word Cloud Generator** (QuickChart.io API)</li>
+            <li>**Pokemon Search** (PokeAPI)</li>
+            <li>**What's for Dinner?** (Recipe Search) (TheMealDB)</li>
+            <li>**Weather by IP** (IPAPI.co and Open-Meteo)</li>
+            <li>**Star Wars Character Search** (SWAPI - Star Wars API)</li>
+        </ul>
+
+        <hr>
+
+        <h2>More Resources</h2>
+        <p>There are more examples on the USBs that you can explore using Visual Studio Code.</p>
+    </div>
 
 </body>
 </html>
