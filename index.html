@@ -28,7 +28,7 @@
 
         /* General Styling */
         body { 
-            /* 2. APPLY FIGTREE FONT */
+            /* APPLY FIGTREE FONT */
             font-family: 'Figtree', sans-serif; 
             margin: 0; 
             padding: 20px; 
@@ -38,12 +38,24 @@
             color: var(--text-on-light); 
         }
 
+        /* HEADER BRANDING (New Container for Title and Logo) */
+        .header-branding {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+        }
+        .gtac-logo {
+            max-height: 50px;
+            width: auto;
+        }
+
         /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
         h1 { 
             color: var(--cobalt-blue); 
             border-bottom: 4px solid var(--sodium-flame); /* Bold, bright accent */
             padding-bottom: 10px; 
-            margin-bottom: 30px; 
+            margin-bottom: 0; /* Adjusted to be controlled by .header-branding */
         }
 
         /* H2: Onyx on Eggshell, Border: Chlorophyll Green */
@@ -70,7 +82,7 @@
             /* Border: Aquamarine */
             border: 1px solid var(--aquamarine);
             border-radius: 10px;
-            /* Background: Maintain Eggshell for consistency, but you could use White (#ffffff) here if desired */
+            /* Background: Maintain Eggshell for consistency */
             background-color: var(--eggshell);
             /* Box Shadow remains neutral */
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -103,7 +115,7 @@
             margin-bottom: 8px;
         }
 
-        /* Image Placeholder Styling - Used Aquamarine and Onyx for a branded dashed box */
+        /* Image Placeholder Styling */
         .flowchart-placeholder {
             width: 100%;
             height: 400px;
@@ -143,7 +155,10 @@
 </head>
 <body>
 
-    <h1>🚀 GTAC - Vibe Coding Workshop</h1>
+    <div class="header-branding">
+        <h1>🚀 GTAC - Vibe Coding Workshop</h1>
+        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
+    </div>
 
     <div class="content-container">
         <h2>Workshop Flowchart</h2>
