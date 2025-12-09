@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTAC - Vibe Coding Workshop Installation</title>
+    <style>
+        /* General Styling */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; color: #343a40; }
+        h1 { color: #007bff; border-bottom: 4px solid #007bff; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: #343a40; margin-top: 40px; margin-bottom: 20px; border-left: 5px solid #28a745; padding-left: 10px; }
+        h3 { color: #17a2b8; border-bottom: 2px dashed #17a2b8; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; }
+
+        /* Content Container */
+        .content-container {
+            margin-top: 30px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Steps List Styling */
+        .step-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+        .step-list > li {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .step-list > li strong {
+            color: #007bff;
+        }
+        .step-list > li p {
+            margin-top: 10px;
+        }
+
+        /* Image Styling - New styles for actual images */
+        .step-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #adb5bd;
+            border-radius: 3px;
+            display: block;
+            margin: 10px 0 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Image Placeholder Styling (Removed but kept class for reference, will be replaced by img) */
+        /* .image-placeholder { ... } */
+
+        .troubleshooting-note {
+            background-color: #fff3cd; /* Light warning color */
+            border-left: 5px solid #ffc107;
+            padding: 10px 15px;
+            margin-top: 20px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 GTAC - Vibe Coding Workshop Setup</h1>
+
+    <div class="content-container">
+        <h2>Prerequisites</h2>
+        <p>There are a few installation, setup and login steps we need to complete before we can begin:</p>
+        <ul>
+            <li>install <strong>Visual Studio Code</strong></li>
+            <li>install a <strong>"Live Preview"</strong> extension for Visual Studio Code</li>
+            <li>log in using a Google or a Department of Education email account and register for <strong>GitHub</strong> (to enable AI assistance)</li>
+            <li>select an <strong>AI model</strong> to assist us</li>
+        </ul>
+    </div>
+
+    <div class="content-container">
+        <h2>Installation Steps</h2>
+
+        <h3>Step 1. Install 'Visual Studio Code'</h3>
+        <p>Install 'Visual Studio Code' from Microsoft Store or your browser.</p>
+        <p>Search for Microsoft Store or open your browser.</p>
+        <img src="3.png" alt="Step 1: Visual Studio Code download/install page" class="step-image">
+        <img src="1.png" alt="Step 1: Searching for Microsoft Store/browser" class="step-image">
+        <p>Search for <strong>Visual Studio Code</strong>.</p>
+        <img src="2.png" alt="Step 1: Search results for Visual Studio Code" class="step-image">
+        <p>Install to your computer and open.</p>
+
+
+        <h3>Step 2. Open the prepared project folder on the GTAC USB</h3>
+        <p>On VS Code: Click <strong>'File'</strong> > Click <strong>'Open Folder…'</strong> > Select <strong>"GTAC PL"</strong> from USB.</p>
+        <img src="5.png" alt="Step 2: File -> Open Folder dialogue" class="step-image">
+        <img src="6.png" alt="Step 2: Trust workspace prompt" class="step-image">
+        <p>Select to <strong>trust the author</strong> of this folder.</p>
+        <img src="7.png" alt="Step 2: Trust workspace prompt" class="step-image">
+
+        <h3>Step 3. Select the working file</h3>
+        <p>Select the working file where you will be typing (e.g., `index.html` or a specific project file).</p>
+        <img src="8.png" alt="Step 3: Selecting a file in the VS Code Explorer" class="step-image">
+
+
+        <h3>Step 4. Add Live Preview Extension</h3>
+        <p>Press <strong>Ctrl + Shift + X</strong> and type <strong>'live preview'</strong> into <strong>'Search Extensions'</strong> on the top left search bar and click <strong>Install</strong>.</p>
+        <img src="9.png" alt="Step 4: Extensions sidebar open, searching for 'live preview'" class="step-image">
+        
+        <p>Open <strong>'Live Preview'</strong> using <strong>Ctrl + Shift + P</strong> (and search for Live Preview: Show internal preview).</p>
+        <img src="10.png" alt="Step 4: Live Preview extension install button" class="step-image">
+        <p>Your interface should now look something like shown below.</p>
+        <img src="11.png" alt="Step 4: Command palette open with 'Live Preview' selected" class="step-image">
+
+
+        <h3>Step 5. Enable AI Chat (Vibe Code)</h3>
+        <p>Click the <strong>chat icon</strong> / Press <strong>Ctrl+Alt+I</strong>.</p>
+        <img src="12.png" alt="Step 5: The AI chat icon in VS Code" class="step-image">
+
+
+        <h3>Step 6. Log in to GitHub (for AI Access)</h3>
+        <p>You will need to log in to enable AI chats for vibe coding. Type anything into the chat and press enter. If you can't see chat on the right panel, show it in the <strong>View</strong> pane.</p>
+        <img src="13.png" alt="Step 6: View menu showing Chat option" class="step-image">
+
+        <div class="troubleshooting-note">
+            <h4>Troubleshooting: Initial Sign-up Prompt</h4>
+            <p>Type anything into the chat and it will try to sign you in.</p>
+            <img src="14.png" alt="Troubleshooting: Typing a prompt in the chat" class="step-image">
+            <p>This will bring you to the sign in prompt. Select <strong>continue with google/github</strong> and then login using your <strong>Department of Education email</strong>.</p>
+            <img src="15.png" alt="Troubleshooting: The Sign-in prompt" class="step-image">
+            <p><strong>NOTE:</strong> You can sign in with your personal or school google account, but signing in with the Department email gives you best access to a range of AI models.</p>
+        </div>
+        
+        <div class="troubleshooting-note">
+            <h4>Troubleshooting: GitHub Registration</h4>
+            <p>If you run into issues with your sign in, click continue with google then select your Department of Education (or your chosen sign-in) again.</p>
+            <img src="16.png" alt="Troubleshooting: Re-selecting the sign-in method" class="step-image">
+            <img src="17.png" alt="Troubleshooting: Sign-in confirmation page" class="step-image">
+            <p>You will be brought to a GitHub registration page. You need to register to get access to the AI models. Decide on your username and sign up for GitHub.</p>
+            <img src="18.png" alt="Troubleshooting: GitHub registration page" class="step-image">
+            <p>Go back to Visual Studio Code. If it hasn't signed in automatically, just <strong>cancel sign in</strong> and you will be prompted to <strong>retry</strong>.</p>
+            <img src="19.png" alt="Troubleshooting: Retry button" class="step-image">
+            <p>Retry. This should open a browser window.</p>
+            <img src="20.png" alt="Troubleshooting: Browser window opening" class="step-image">
+            <p>Select <strong>Continue</strong> for your new GitHub login.</p>
+            <img src="21.png" alt="Troubleshooting: Continue button on GitHub page" class="step-image">
+            <p>Then <strong>Authorise</strong>.</p>
+            <img src="22.png" alt="Troubleshooting: Authorise button/page" class="step-image">
+            <img src="23.png" alt="Troubleshooting: Final sign-in success message" class="step-image">
+            <p>It should sign you in!</p>
+        </div>
+
+        <hr>
+
+        <h3>Final Step: Select AI Model</h3>
+        <p>Press <strong>Ctrl+I</strong> to open the chat window.</p>
+        <img src="24.png" alt="Final Step: Ctrl+I opening the chat bar" class="step-image">
+        <p>Type your prompt here.</p>
+        <img src="26.png" alt="Final Step: Prompt being typed into the chat" class="step-image">
+        <p>Once you enter your prompt, it will prompt you back to select a model. <strong>GPT5 mini</strong> or <strong>Claude Haiki 4.5</strong> will work just fine.</p>
+        <img src="28.png" alt="Final Step: Model selection prompt" class="step-image">
+        <p>Code should start to populate your index.html documents.  Your Live Preview window should show the first iteration of your app.  Hooray!</p>
+        <img src="29.png" alt="Final Step: Model selection prompt" class="step-image">
+    </div>
+
+</body>
+</html>
