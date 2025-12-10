@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IP → Local Weather</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; color:#111}
+        body{margin:0;padding:24px;background:#f7f9fc}
+        .card{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;padding:20px;box-shadow:0 6px 24px rgba(16,24,40,0.08)}
+        h1{margin:0 0 12px;font-size:20px}
+        p{margin:6px 0}
+        .meta{color:#5b6b79;font-size:13px}
+        .large{font-size:28px;margin:8px 0}
+        .btn{display:inline-block;margin-top:12px;padding:8px 12px;border-radius:8px;background:#0b69ff;color:white;text-decoration:none;border:none;cursor:pointer}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+        .box{background:#f2f6fb;padding:10px;border-radius:8px}
+        .error{color:#9b1c1c;background:#fff0f0;padding:10px;border-radius:6px;margin-top:12px}
+        footer{margin-top:18px;color:#6b7785;font-size:12px}
+    </style>
+</head>
+<body>
+    <main class="card" role="main">
+        <h1>IP → Local Weather</h1>
+
+        <p class="meta" id="status">Click "Get my weather" or it will run automatically.</p>
+        <div class="grid">
+            <div class="box">
+                <strong>IP & Location</strong>
+                <p id="ip">—</p>
+                <p id="location" class="meta">—</p>
+                <p id="coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Current Weather</strong>
+                <p id="summary">—</p>
+                <p class="large" id="temp">—</p>
+                <p id="details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="box">
+                <strong>Harvard, Illinois</strong>
+                <p id="harvard-location" class="meta">—</p>
+                <p id="harvard-coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Harvard Weather</strong>
+                <p id="harvard-summary">—</p>
+                <p class="large" id="harvard-temp">—</p>
+                <p id="harvard-details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="box">
+                <strong>Phoenix, Arizona</strong>
+                <p id="phoenix-location" class="meta">—</p>
+                <p id="phoenix-coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Phoenix Weather</strong>
+                <p id="phoenix-summary">—</p>
+                <p class="large" id="phoenix-temp">—</p>
+                <p id="phoenix-details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="box">
+                <strong>Auburn, Indiana</strong>
+                <p id="auburn-location" class="meta">—</p>
+                <p id="auburn-coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Auburn Weather</strong>
+                <p id="auburn-summary">—</p>
+                <p class="large" id="auburn-temp">—</p>
+                <p id="auburn-details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="box">
+                <strong>Denver, Colorado</strong>
+                <p id="denver-location" class="meta">—</p>
+                <p id="denver-coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Denver Weather</strong>
+                <p id="denver-summary">—</p>
+                <p class="large" id="denver-temp">—</p>
+                <p id="denver-details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="box">
+                <strong>Highett, Victoria</strong>
+                <p id="highett-location" class="meta">—</p>
+                <p id="highett-coords" class="meta">—</p>
+            </div>
+            <div class="box">
+                <strong>Highett Weather</strong>
+                <p id="highett-summary">—</p>
+                <p class="large" id="highett-temp">—</p>
+                <p id="highett-details" class="meta">—</p>
+            </div>
+        </div>
+        <div class="box" style="margin-top:12px">
+            <strong>Currency Conversion (AUD to USD)</strong>
+            <p id="currency-input" class="meta">—</p>
+            <p id="currency-output" class="large">—</p>
+            <p id="currency-rate" class="meta">—</p>
+        </div>
+        <button id="refresh" class="btn">Get my weather</button>
+        <div id="error" role="alert" class="error" style="display:none"></div>
+        <footer>
+            Uses ipapi.co, Open-Meteo, and exchangerate-api.com (no API keys required).
+        </footer>
+    </main>
+    <script>
+        // GitHub Copilot
+        (function() {
+            const statusEl = document.getElementById('status');
+            const ipEl = document.getElementById('ip');
+            const locationEl = document.getElementById('location');
+            const coordsEl = document.getElementById('coords');
+            const summaryEl = document.getElementById('summary');
+            const tempEl = document.getElementById('temp');
+            const detailsEl = document.getElementById('details');
+            const harvardLocationEl = document.getElementById('harvard-location');
+            const harvardCoordsEl = document.getElementById('harvard-coords');
+            const harvardSummaryEl = document.getElementById('harvard-summary');
+            const harvardTempEl = document.getElementById('harvard-temp');
+            const harvardDetailsEl = document.getElementById('harvard-details');
+            const phoenixLocationEl = document.getElementById('phoenix-location');
+            const phoenixCoordsEl = document.getElementById('phoenix-coords');
+            const phoenixSummaryEl = document.getElementById('phoenix-summary');
+            const phoenixTempEl = document.getElementById('phoenix-temp');
+            const phoenixDetailsEl = document.getElementById('phoenix-details');
+            const auburnLocationEl = document.getElementById('auburn-location');
+            const auburnCoordsEl = document.getElementById('auburn-coords');
+            const auburnSummaryEl = document.getElementById('auburn-summary');
+            const auburnTempEl = document.getElementById('auburn-temp');
+            const auburnDetailsEl = document.getElementById('auburn-details');
+            const denverLocationEl = document.getElementById('denver-location');
+            const denverCoordsEl = document.getElementById('denver-coords');
+            const denverSummaryEl = document.getElementById('denver-summary');
+            const denverTempEl = document.getElementById('denver-temp');
+            const denverDetailsEl = document.getElementById('denver-details');
+            const highettLocationEl = document.getElementById('highett-location');
+            const highettCoordsEl = document.getElementById('highett-coords');
+            const highettSummaryEl = document.getElementById('highett-summary');
+            const highettTempEl = document.getElementById('highett-temp');
+            const highettDetailsEl = document.getElementById('highett-details');
+            const currencyInputEl = document.getElementById('currency-input');
+            const currencyOutputEl = document.getElementById('currency-output');
+            const currencyRateEl = document.getElementById('currency-rate');
+            const errorEl = document.getElementById('error');
+            const refreshBtn = document.getElementById('refresh');
+
+            // Mapping for Open-Meteo weather codes (condensed)
+            const weatherCodes = {
+                0: "Clear sky",
+                1: "Mainly clear",
+                2: "Partly cloudy",
+                3: "Overcast",
+                45: "Fog",
+                48: "Depositing rime fog",
+                51: "Light drizzle",
+                53: "Moderate drizzle",
+                55: "Dense drizzle",
+                56: "Light freezing drizzle",
+                57: "Dense freezing drizzle",
+                61: "Slight rain",
+                63: "Moderate rain",
+                65: "Heavy rain",
+                66: "Light freezing rain",
+                67: "Heavy freezing rain",
+                71: "Slight snow fall",
+                73: "Moderate snow fall",
+                75: "Heavy snow fall",
+                77: "Snow grains",
+                80: "Slight rain showers",
+                81: "Moderate rain showers",
+                82: "Violent rain showers",
+                85: "Slight snow showers",
+                86: "Heavy snow showers",
+                95: "Thunderstorm",
+                96: "Thunderstorm with slight hail",
+                99: "Thunderstorm with heavy hail"
+            };
+
+            async function fetchJSON(url) {
+                const res = await fetch(url, {cache: "no-store"});
+                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                return res.json();
+            }
+
+            async function getGeoFromIP() {
+                statusEl.textContent = 'Determining your IP and location (ipapi.co)…';
+                const data = await fetchJSON('https://ipapi.co/json/');
+                // ipapi.co returns latitude/longitude as strings
+                const lat = parseFloat(data.latitude ?? data.lat ?? data.latitude);
+                const lon = parseFloat(data.longitude ?? data.lon ?? data.longitude);
+                return {
+                    ip: data.ip || '',
+                    city: data.city || '',
+                    region: data.region || data.region_code || '',
+                    country: data.country_name || data.country || '',
+                    latitude: lat,
+                    longitude: lon,
+                    timezone: data.timezone || ''
+                };
+            }
+
+            async function getWeather(lat, lon, timezone) {
+                statusEl.textContent = 'Fetching current weather (open-meteo)…';
+                const params = new URLSearchParams({
+                    latitude: lat,
+                    longitude: lon,
+                    current_weather: 'true',
+                    temperature_unit: 'celsius', // Ensure we request Celsius for the calculation
+                    windspeed_unit: 'kmh',
+                    timezone: timezone || 'auto'
+                });
+                const url = 'https://api.open-meteo.com/v1/forecast?' + params.toString();
+                return fetchJSON(url);
+            }
+
+            async function getHarvardWeather() {
+                // Harvard, Illinois coordinates
+                const lat = 42.4004;
+                const lon = -88.6168;
+                return getWeather(lat, lon, 'America/Chicago');
+            }
+
+            async function getPhoenixWeather() {
+                // Phoenix, Arizona coordinates
+                const lat = 33.4484;
+                const lon = -112.0742;
+                return getWeather(lat, lon, 'America/Phoenix');
+            }
+
+            async function getAuburnWeather() {
+                // Auburn, Indiana coordinates
+                const lat = 41.3784;
+                const lon = -85.0520;
+                return getWeather(lat, lon, 'America/Indiana/Indianapolis');
+            }
+
+            async function getDenverWeather() {
+                // Denver, Colorado coordinates
+                const lat = 39.7392;
+                const lon = -104.9903;
+                return getWeather(lat, lon, 'America/Denver');
+            }
+
+            async function getHighettWeather() {
+                // Highett, Victoria, Australia coordinates
+                const lat = -37.9449;
+                const lon = 145.0987;
+                return getWeather(lat, lon, 'Australia/Melbourne');
+            }
+
+            async function getCurrencyConversion() {
+                statusEl.textContent = 'Fetching currency rates (exchangerate-api.com)…';
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/AUD');
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const data = await response.json();
+                return data;
+            }
+
+            function showError(err) {
+                errorEl.style.display = 'block';
+                errorEl.textContent = String(err);
+                statusEl.textContent = 'Error';
+            }
+
+            function clearError() {
+                errorEl.style.display = 'none';
+                errorEl.textContent = '';
+            }
+
+            async function run() {
+                clearError();
+                try {
+                    const geo = await getGeoFromIP();
+                    ipEl.textContent = geo.ip || 'Unknown IP';
+                    locationEl.textContent = [geo.city, geo.region, geo.country].filter(Boolean).join(', ') || 'Unknown location';
+                    coordsEl.textContent = (Number.isFinite(geo.latitude) && Number.isFinite(geo.longitude))
+                        ? `Lat ${geo.latitude.toFixed(4)}, Lon ${geo.longitude.toFixed(4)}`
+                        : 'Coordinates not available';
+
+                    if (!Number.isFinite(geo.latitude) || !Number.isFinite(geo.longitude)) {
+                        throw new Error('Could not determine coordinates from IP.');
+                    }
+
+                    const weatherData = await getWeather(geo.latitude, geo.longitude, geo.timezone);
+                    const cw = weatherData.current_weather;
+                    if (!cw) throw new Error('No current weather returned.');
+
+                    const wc = cw.weathercode;
+                    const wcText = weatherCodes[wc] || `Weather code ${wc}`;
+                    summaryEl.textContent = wcText;
+
+                    // --- START MODIFICATION FOR C/F DISPLAY ---
+                    const tempC = cw.temperature;
+                    // Calculate Fahrenheit: F = C * 9/5 + 32
+                    const tempF = (tempC * 9/5 + 32);
+
+                    const tempCFormatted = `${tempC.toFixed(1)}°C`;
+                    const tempFFormatted = `${tempF.toFixed(1)}°F`;
+                    
+                    // Display both temperatures
+                    tempEl.textContent = `${tempCFormatted} / ${tempFFormatted}`; 
+                    // --- END MODIFICATION ---
+
+                    detailsEl.textContent = `Wind ${cw.windspeed} ${weatherData.windspeed_unit || 'km/h'} • Time: ${cw.time}`;
+
+                    // Fetch and display Harvard, Illinois weather
+                    const harvardWeatherData = await getHarvardWeather();
+                    const harvardCW = harvardWeatherData.current_weather;
+                    if (!harvardCW) throw new Error('No Harvard weather returned.');
+
+                    harvardLocationEl.textContent = 'Harvard, Illinois, USA';
+                    harvardCoordsEl.textContent = 'Lat 42.4004, Lon -88.6168';
+
+                    const harvardWC = harvardCW.weathercode;
+                    const harvardWCText = weatherCodes[harvardWC] || `Weather code ${harvardWC}`;
+                    harvardSummaryEl.textContent = harvardWCText;
+
+                    const harvardTempC = harvardCW.temperature;
+                    const harvardTempF = (harvardTempC * 9/5 + 32);
+                    const harvardTempCFormatted = `${harvardTempC.toFixed(1)}°C`;
+                    const harvardTempFFormatted = `${harvardTempF.toFixed(1)}°F`;
+                    harvardTempEl.textContent = `${harvardTempCFormatted} / ${harvardTempFFormatted}`;
+                    harvardDetailsEl.textContent = `Wind ${harvardCW.windspeed} ${harvardWeatherData.windspeed_unit || 'km/h'} • Time: ${harvardCW.time}`;
+
+                    // Fetch and display Phoenix, Arizona weather
+                    const phoenixWeatherData = await getPhoenixWeather();
+                    const phoenixCW = phoenixWeatherData.current_weather;
+                    if (!phoenixCW) throw new Error('No Phoenix weather returned.');
+
+                    phoenixLocationEl.textContent = 'Phoenix, Arizona, USA';
+                    phoenixCoordsEl.textContent = 'Lat 33.4484, Lon -112.0742';
+
+                    const phoenixWC = phoenixCW.weathercode;
+                    const phoenixWCText = weatherCodes[phoenixWC] || `Weather code ${phoenixWC}`;
+                    phoenixSummaryEl.textContent = phoenixWCText;
+
+                    const phoenixTempC = phoenixCW.temperature;
+                    const phoenixTempF = (phoenixTempC * 9/5 + 32);
+                    const phoenixTempCFormatted = `${phoenixTempC.toFixed(1)}°C`;
+                    const phoenixTempFFormatted = `${phoenixTempF.toFixed(1)}°F`;
+                    phoenixTempEl.textContent = `${phoenixTempCFormatted} / ${phoenixTempFFormatted}`;
+                    phoenixDetailsEl.textContent = `Wind ${phoenixCW.windspeed} ${phoenixWeatherData.windspeed_unit || 'km/h'} • Time: ${phoenixCW.time}`;
+
+                    // Fetch and display Auburn, Indiana weather
+                    const auburnWeatherData = await getAuburnWeather();
+                    const auburnCW = auburnWeatherData.current_weather;
+                    if (!auburnCW) throw new Error('No Auburn weather returned.');
+
+                    auburnLocationEl.textContent = 'Auburn, Indiana, USA';
+                    auburnCoordsEl.textContent = 'Lat 41.3784, Lon -85.0520';
+
+                    const auburnWC = auburnCW.weathercode;
+                    const auburnWCText = weatherCodes[auburnWC] || `Weather code ${auburnWC}`;
+                    auburnSummaryEl.textContent = auburnWCText;
+
+                    const auburnTempC = auburnCW.temperature;
+                    const auburnTempF = (auburnTempC * 9/5 + 32);
+                    const auburnTempCFormatted = `${auburnTempC.toFixed(1)}°C`;
+                    const auburnTempFFormatted = `${auburnTempF.toFixed(1)}°F`;
+                    auburnTempEl.textContent = `${auburnTempCFormatted} / ${auburnTempFFormatted}`;
+                    auburnDetailsEl.textContent = `Wind ${auburnCW.windspeed} ${auburnWeatherData.windspeed_unit || 'km/h'} • Time: ${auburnCW.time}`;
+
+                    // Fetch and display Denver, Colorado weather
+                    const denverWeatherData = await getDenverWeather();
+                    const denverCW = denverWeatherData.current_weather;
+                    if (!denverCW) throw new Error('No Denver weather returned.');
+
+                    denverLocationEl.textContent = 'Denver, Colorado, USA';
+                    denverCoordsEl.textContent = 'Lat 39.7392, Lon -104.9903';
+
+                    const denverWC = denverCW.weathercode;
+                    const denverWCText = weatherCodes[denverWC] || `Weather code ${denverWC}`;
+                    denverSummaryEl.textContent = denverWCText;
+
+                    const denverTempC = denverCW.temperature;
+                    const denverTempF = (denverTempC * 9/5 + 32);
+                    const denverTempCFormatted = `${denverTempC.toFixed(1)}°C`;
+                    const denverTempFFormatted = `${denverTempF.toFixed(1)}°F`;
+                    denverTempEl.textContent = `${denverTempCFormatted} / ${denverTempFFormatted}`;
+                    denverDetailsEl.textContent = `Wind ${denverCW.windspeed} ${denverWeatherData.windspeed_unit || 'km/h'} • Time: ${denverCW.time}`;
+
+                    // Fetch and display Highett, Victoria weather
+                    const highettWeatherData = await getHighettWeather();
+                    const highettCW = highettWeatherData.current_weather;
+                    if (!highettCW) throw new Error('No Highett weather returned.');
+
+                    highettLocationEl.textContent = 'Highett, Victoria, Australia';
+                    highettCoordsEl.textContent = 'Lat -37.9449, Lon 145.0987';
+
+                    const highettWC = highettCW.weathercode;
+                    const highettWCText = weatherCodes[highettWC] || `Weather code ${highettWC}`;
+                    highettSummaryEl.textContent = highettWCText;
+
+                    const highettTempC = highettCW.temperature;
+                    const highettTempF = (highettTempC * 9/5 + 32);
+                    const highettTempCFormatted = `${highettTempC.toFixed(1)}°C`;
+                    const highettTempFFormatted = `${highettTempF.toFixed(1)}°F`;
+                    highettTempEl.textContent = `${highettTempCFormatted} / ${highettTempFFormatted}`;
+                    highettDetailsEl.textContent = `Wind ${highettCW.windspeed} ${highettWeatherData.windspeed_unit || 'km/h'} • Time: ${highettCW.time}`;
+
+                    // Fetch and display currency conversion
+                    const currencyData = await getCurrencyConversion();
+                    const usdRate = currencyData.rates.USD;
+                    const audAmount = 1; // Convert 100 AUD
+                    const usdAmount = (audAmount * usdRate).toFixed(2);
+                    
+                    currencyInputEl.textContent = `${audAmount} AUD`;
+                    currencyOutputEl.textContent = `${usdAmount} USD`;
+                    currencyRateEl.textContent = `1 AUD = ${usdRate.toFixed(4)} USD`;
+
+                    statusEl.textContent = 'Updated';
+                } catch (err) {
+                    showError(err.message || String(err));
+                    // keep some visible placeholders
+                    summaryEl.textContent = '—';
+                    tempEl.textContent = '—';
+                    detailsEl.textContent = '—';
+                    harvardSummaryEl.textContent = '—';
+                    harvardTempEl.textContent = '—';
+                    harvardDetailsEl.textContent = '—';
+                    phoenixSummaryEl.textContent = '—';
+                    phoenixTempEl.textContent = '—';
+                    phoenixDetailsEl.textContent = '—';
+                    auburnSummaryEl.textContent = '—';
+                    auburnTempEl.textContent = '—';
+                    auburnDetailsEl.textContent = '—';
+                    denverSummaryEl.textContent = '—';
+                    denverTempEl.textContent = '—';
+                    denverDetailsEl.textContent = '—';
+                    highettSummaryEl.textContent = '—';
+                    highettTempEl.textContent = '—';
+                    highettDetailsEl.textContent = '—';
+                    currencyInputEl.textContent = '—';
+                    currencyOutputEl.textContent = '—';
+                    currencyRateEl.textContent = '—';
+                }
+            }
+
+            // wire up
+            refreshBtn.addEventListener('click', run);
+
+            // auto-run on load
+            run();
+        })();
+    </script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"27a3862e3d1e4cb48e6bc8f4171bd6e9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script></body></html>
