@@ -17,11 +17,31 @@
         .box{background:#f2f6fb;padding:10px;border-radius:8px}
         .error{color:#9b1c1c;background:#fff0f0;padding:10px;border-radius:6px;margin-top:12px}
         footer{margin-top:18px;color:#6b7785;font-size:12px}
+        .back-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #0a84ff;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 10000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.back-button:hover {
+    background: #0066cc;
+}
+
     </style>
 </head>
 <body>
     <main class="card" role="main">
         <h1>IP → Local Weather</h1>
+        <a href="https://gtacaus.github.io/vibecode/index.html" class="back-button">⟵ Back</a>
+
         <p class="meta" id="status">Click "Get my weather" or it will run automatically.</p>
 
         <div class="grid">
