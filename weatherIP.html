@@ -17,16 +17,13 @@
         .box{background:#f2f6fb;padding:10px;border-radius:8px}
         .error{color:#9b1c1c;background:#fff0f0;padding:10px;border-radius:6px;margin-top:12px}
         footer{margin-top:18px;color:#6b7785;font-size:12px}
-
     </style>
 </head>
 <body>
     <main class="card" role="main">
         <h1>IP → Local Weather</h1>
 
-
         <p class="meta" id="status">Click "Get my weather" or it will run automatically.</p>
-
         <div class="grid">
             <div class="box">
                 <strong>IP & Location</strong>
@@ -34,7 +31,6 @@
                 <p id="location" class="meta">—</p>
                 <p id="coords" class="meta">—</p>
             </div>
-
             <div class="box">
                 <strong>Current Weather</strong>
                 <p id="summary">—</p>
@@ -42,15 +38,12 @@
                 <p id="details" class="meta">—</p>
             </div>
         </div>
-
         <button id="refresh" class="btn">Get my weather</button>
         <div id="error" role="alert" class="error" style="display:none"></div>
-
         <footer>
             Uses ipapi.co and Open-Meteo (no API keys required).
         </footer>
     </main>
-
     <script>
         // GitHub Copilot
         (function() {
@@ -125,7 +118,7 @@
                     latitude: lat,
                     longitude: lon,
                     current_weather: 'true',
-                    temperature_unit: 'celsius',
+                    temperature_unit: 'celsius', // Ensure we request Celsius for the calculation
                     windspeed_unit: 'kmh',
                     timezone: timezone || 'auto'
                 });
@@ -165,9 +158,20 @@
                     const wc = cw.weathercode;
                     const wcText = weatherCodes[wc] || `Weather code ${wc}`;
                     summaryEl.textContent = wcText;
-                    tempEl.textContent = `${cw.temperature.toFixed(1)}°${weatherData.temperature_unit || 'C'}`;
-                    detailsEl.textContent = `Wind ${cw.windspeed} ${weatherData.windspeed_unit || 'km/h'} • Time: ${cw.time}`;
 
+                    // --- START MODIFICATION FOR C/F DISPLAY ---
+                    const tempC = cw.temperature;
+                    // Calculate Fahrenheit: F = C * 9/5 + 32
+                    const tempF = (tempC * 9/5 + 32);
+
+                    const tempCFormatted = `${tempC.toFixed(1)}°C`;
+                    const tempFFormatted = `${tempF.toFixed(1)}°F`;
+                    
+                    // Display both temperatures
+                    tempEl.textContent = `${tempCFormatted} / ${tempFFormatted}`; 
+                    // --- END MODIFICATION ---
+
+                    detailsEl.textContent = `Wind ${cw.windspeed} ${weatherData.windspeed_unit || 'km/h'} • Time: ${cw.time}`;
                     statusEl.textContent = 'Updated';
                 } catch (err) {
                     showError(err.message || String(err));
@@ -184,6 +188,4 @@
             // auto-run on load
             run();
         })();
-    </script>
-</body>
-</html></div></main>
+    </script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"27a3862e3d1e4cb48e6bc8f4171bd6e9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script></body></html>
