@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>External Examples</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* GTAC HERO COLOURS AS CSS VARIABLES */
+        :root {
+            --eggshell: #F9F6E7;
+            --sodium-flame: #FF6D3A;
+            --cadmium-yellow: #FFCD1F;
+            --chlorophyll-green: #00BC74;
+            --aquamarine: #6BE7BE;
+            --lavender: #C0ADFF;
+            --cobalt-blue: #4C34E5;
+            --onyx: #272A24;
+
+            /* Helper Tints/Shades for accessibility or borders */
+            --dark-accent: var(--cobalt-blue);
+            --secondary-accent: var(--chlorophyll-green);
+            --tertiary-accent: var(--sodium-flame);
+            --text-on-light: var(--onyx);
+            --text-on-dark: var(--eggshell);
+            
+            /* Code/UI Colors */
+            --code-bg: var(--aquamarine); /* Using Aquamarine for code blocks */
+            --copy-button-bg: var(--chlorophyll-green); /* Green for copy buttons - KEPT FOR GENERIC STYLING */
+        }
+
+        /* General Styling */
+        body { 
+            /* APPLY FIGTREE FONT */
+            font-family: 'Figtree', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            /* Background: Eggshell (light base) */
+            background-color: var(--eggshell); 
+            /* Primary Text: Onyx (on light background) */
+            color: var(--text-on-light); 
+        }
+
+        /* HEADER BRANDING (New Container for Title and Logo) */
+        .header-branding {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+        }
+        .gtac-logo {
+            max-height: 50px;
+            width: auto;
+            cursor: default; 
+        }
+        
+        /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
+        h1 { 
+            color: var(--cobalt-blue); 
+            border-bottom: 4px solid var(--sodium-flame); /* Bold, bright accent */
+            padding-bottom: 10px; 
+            margin-bottom: 0;
+        }
+
+        /* H2: Onyx on Eggshell, Border: Chlorophyll Green */
+        h2 { 
+            color: var(--text-on-light); 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--chlorophyll-green); 
+            padding-left: 10px; 
+        }
+        
+        /* Table Styling */
+        .summary-table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .summary-table th, .summary-table td { 
+            border: 1px solid var(--aquamarine); 
+            padding: 12px; 
+            text-align: left; 
+        }
+        .summary-table th { 
+            background-color: var(--cobalt-blue); 
+            color: var(--text-on-dark); 
+            font-weight: 700; 
+        }
+        .summary-table tr:nth-child(even) { background-color: var(--aquamarine); } 
+
+        /* Project Container & Separators */
+        .project-container {
+            margin-top: 30px;
+            padding: 25px;
+            border: 1px solid var(--aquamarine);
+            border-radius: 10px;
+            background-color: var(--eggshell);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .project-container h3 {
+            color: var(--cobalt-blue);
+            border-bottom: 2px dashed var(--aquamarine);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* iFrame Styling */
+        .project-iframe {
+            width: 100%;
+            height: 800px;
+            border: 1px solid var(--onyx); 
+            border-radius: 5px;
+            margin-top: 15px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+        }
+
+        /* Prompt Styling - REMOVED PROMPT/URL BOXES */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0a84ff;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .back-button:hover {
+            background: #0066cc;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-branding">
+        <h1>🛠️ Additional External Project Examples</h1>
+        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
+    </div>
+<a href="index.html" class="back-button">⟵ Back</a>
+
+    <p> These are additional web projects demonstrating the use of APIs or edge computing platforms like Cloudflare Workers to deliver data-driven applications.</p>
+    <div class="project-container">
+        <h2> Project Summaries</h2>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Main Idea</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fuel Price Finder</td>
+                    <td>Displays current or recent fuel prices using an external data source.</td>
+                </tr>
+                <tr>
+                    <td>Global Tide Tracker</td>
+                    <td>Provides tidal forecasts (high/low tide times and heights).</td>
+                </tr>
+                <tr>
+                    <td>Color-Number Converter</td>
+                    <td>Converts numerical inputs (like HEX, RGB) into color representations, or vice versa.</td>
+                </tr>
+                <tr>
+                    <td>Ink Timer</td>
+                    <td>A specialized countdown or timing tool, likely for specific media or tasks (e.g., printing, tattoo).</td>
+                </tr>
+                <tr>
+                    <td>EPG (Electronic Program Guide)</td>
+                    <td>Provides a schedule or guide for media/TV programs, using real-time data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="project-container">
+        <h3>Fuel Price Finder</h3>
+        <p>A web application hosted on a Cloudflare Worker that dynamically fetches and displays information, likely related to current fuel prices or energy statistics.</p>
+        <iframe class="project-iframe" src="https://fuel.dgoddard.workers.dev/" title="Fuel Price Finder App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>Global Tide Tracker</h3>
+        <p>An application that uses a marine data API to provide accurate, location-based forecasts for high and low tide times.</p>
+        <iframe class="project-iframe" src="https://tide.dunc.app/" title="Global Tide Tracker App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>Color-Number Converter</h3>
+        <p>A utility application designed to help users convert between different representations of color codes and numerical values.</p>
+        <iframe class="project-iframe" src="https://colournum.dunc.app/" title="Color-Number Converter App"></iframe>
+    </div>
+    
+    <div class="project-container">
+        <h3>Ink Timer</h3>
+        <p>A simple, focused timing tool, possibly designed for specific activities like drawing, tattooing, or printing where time is tracked precisely.</p>
+        <iframe class="project-iframe" src="https://inktimer.dunc.app/" title="Ink Timer App"></iframe>
+    </div>
+
+    <div class="project-container">
+        <h3>EPG (Electronic Program Guide)</h3>
+        <p>This application fetches and displays television or media programming schedules, similar to what you would find on a smart TV or streaming service.</p>
+        <iframe class="project-iframe" src="https://epg.dunc.app/" title="EPG App"></iframe>
+    </div>
+
+</body>
+</html>
