@@ -52,6 +52,8 @@
         .gtac-logo {
             max-height: 50px;
             width: auto;
+            /* Added pointer cursor to indicate it's clickable */
+            cursor: pointer; 
         }
         
         /* H1: Cobalt Blue on Eggshell, Border: Sodium Flame for visual pop */
@@ -181,11 +183,11 @@
 
     <div class="header-branding">
         <h1>🚀 Vibe Code Project Examples</h1>
-        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo">
+        <img src="https://gtac.edu.au/wp-content/themes/gtac/assets/images/logo-2024.png" alt="GTAC Logo" class="gtac-logo" id="gtac-logo">
     </div>
 <a href="https://gtacaus.github.io/vibecode/index.html" class="back-button">⟵ Back</a>
 
-    <p> These projects all used an **Application Programming Interface (API)** to communicate with other websites for information or data.  **APIs** have defined rules and tools that allows different apps to communicate and interact with each other. The prompt to generate each example application came from a <b>maximum</b> of four sentences.  You can find the prompt that was used to generate the web app below each example.</p>
+    <p> These projects all used an **Application Programming Interface (API)** to communicate with other websites for information or data.  **APIs** have defined rules and tools that allows different apps to communicate and interact with each other. The prompt to generate each example application came from a <b>maximum</b> of four sentences.  You can find the prompt that was used to generate the web app below each example.</p>
     <div class="project-container">
         <h2> Project Summaries</h2>
         <table class="summary-table">
@@ -285,7 +287,7 @@ Generate an html and javascript web app that just uses a single html document. I
     <div class="project-container">
         <h3>Star Wars Character Search</h3>
         <p>Search for a Star Wars character by name and get details using the SWAPI (Star Wars API).</p>
-        <iframe class="project-iframe" src="https://gtacaus.github.io/vibecode/swapi.html" title="Star Wars Character Search App"></iframe>
+        <iframe class="project-iframe" src="swapi.html" title="Star Wars Character Search App"></iframe>
         
         <div class="prompt-title">Full Prompt:</div>
         <div class="button-group">
@@ -295,7 +297,6 @@ Generate an html and javascript web app that just uses a single html document. I
             <button class="copy-button" onclick="copyToClipboard('prompt-starwars-full')">Copy</button>
         </div>
     </div>
-
 
 
     <script>
@@ -334,6 +335,43 @@ Generate an html and javascript web app that just uses a single html document. I
             }
             document.body.removeChild(textarea);
         }
+
+        // ----------------------------------------------------------------
+        // NEW JAVASCRIPT FOR TRIPLE-CLICK NAVIGATION
+        // ----------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            const logo = document.getElementById('gtac-logo');
+            let clickCount = 0;
+            let lastClickTime = 0;
+            const TIMEOUT = 500; // Time in ms to reset the click counter (half a second)
+            
+            if (logo) {
+                logo.addEventListener('click', () => {
+                    const currentTime = new Date().getTime();
+                    
+                    // Check if the time difference is within the threshold (500ms)
+                    if (currentTime - lastClickTime < TIMEOUT) {
+                        clickCount++;
+                    } else {
+                        // Reset the count if too much time has passed
+                        clickCount = 1; 
+                    }
+                    
+                    lastClickTime = currentTime;
+
+                    // Check for three consecutive clicks
+                    if (clickCount === 3) {
+                        clickCount = 0; // Reset counter after successful action
+                        // Since you are already on examples.html, I'll redirect to index.html 
+                        // as a logical "home" page for this file structure.
+                        // Change 'index.html' to 'examples.html' if you want to redirect to itself 
+                        // or another page.
+                        window.location.href = 'examples.html'; 
+                    }
+                });
+            }
+        });
+        // ----------------------------------------------------------------
     </script>
 
 </body>
